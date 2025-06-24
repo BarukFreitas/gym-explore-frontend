@@ -1,0 +1,106 @@
+{
+  "Navbar": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact",
+    "joinNow": "Join Now"
+  },
+  "HeroSection": {
+    "title": "Elevate your workout",
+    "description": "Transform your body and mind with state-of-the-art equipment, expert guidance, and a community that pushes you forward. Start your journey to a stronger, healthier life today.",
+    "getStarted": "Get Started",
+    "figmaComponent": "Your Fitness Journey Starts Here"
+  },
+  "Footer": {
+    "aboutUsTitle": "About Us",
+    "aboutUsText": "Dedicated to helping you achieve your fitness goals. We provide top-notch facilities and expert guidance.",
+    "quickLinksTitle": "Quick Links",
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "contactUsTitle": "Contact Us",
+    "address": "123 Fitness Ave, Gym City, GC 12345",
+    "phone": "+1 (123) 456-7890",
+    "email": "info@gymexplore.com",
+    "allRightsReserved": "© {year} Gym Explore. All rights reserved."
+  },
+  "AboutPage": {
+    "title": "About Us",
+    "subtitle": "Our Story and Mission",
+    "paragraph1": "At Gym Explore, we believe that fitness is a journey, not a destination. Our mission is to empower individuals to achieve their health and wellness goals through state-of-the-art facilities, expert guidance, and a supportive community.",
+    "paragraph2": "Founded in [Year], Gym Explore started with a simple vision: to create a welcoming environment where everyone, regardless of their fitness level, feels motivated to push their limits. We offer a wide range of equipment, personalized training programs, and diverse group classes tailored to meet your unique needs.",
+    "paragraph3": "Our team of certified trainers, nutritionists, and wellness coaches is dedicated to providing you with the knowledge and tools you need to succeed. We are passionate about fostering a healthy lifestyle and are committed to helping you unlock your full potential.",
+    "cta": "Join our community today and embark on your fitness journey with us!"
+  },
+  "ContactPage": {
+    "title": "Get in Touch",
+    "imageAlt": "Modern gym environment with weight training equipment",
+    "formHeading": "Send us a message",
+    "infoHeading": "Our Information",
+    "Form": {
+      "nameLabel": "Full Name",
+      "namePlaceholder": "Your Name",
+      "nameRequired": "Please enter your full name.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "youremail@example.com",
+      "emailRequired": "Please enter your email.",
+      "emailInvalid": "Please enter a valid email.",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "Message subject",
+      "subjectRequired": "Please enter the subject of your message.",
+      "messageLabel": "Your Message",
+      "messagePlaceholder": "Type your message here...",
+      "messageRequired": "Please type your message.",
+      "sendButton": "Send Message",
+      "sending": "Sending...",
+      "successMessage": "Message sent successfully! We will contact you shortly.",
+      "errorMessage": "An error occurred while sending the message. Please try again later."
+    },
+    "Info": {
+      "addressTitle": "Address",
+      "addressLine1": "Paulista Avenue, 1578",
+      "addressLine2": "Bela Vista, São Paulo - SP, 01310-200, Brazil",
+      "phoneTitle": "Phone",
+      "phoneNumber": "+55 (11) 98765-4321",
+      "emailTitle": "Email",
+      "emailAddress": "contact@gymexplore.com.br",
+      "hoursTitle": "Opening Hours",
+      "hoursDetails": "Monday to Friday: 06:00 AM - 11:00 PM\nSaturday: 08:00 AM - 06:00 PM\nSunday: Closed",
+      "viewOnMap": "View on Map"
+    }
+  },
+  "ServicesPage": {
+    "title": "Our Services",
+    "subtitle": "Discover how Gym Explore can transform your fitness journey and connect you with the ideal community.",
+    "imageAlt": "People connecting and training in a modern gym",
+    "card1Title": "Connect with the Community",
+    "card1Description": "Find and follow friends, discover new gyms, and interact with a community of fitness enthusiasts.",
+    "card2Title": "Share Your Journey",
+    "card2Description": "Post your workout routines, nutrition tips, and achievements. Inspire and be inspired by other members.",
+    "card3Title": "Gym Profiles",
+    "card3Description": "Explore detailed gym profiles, view reviews, schedules, and offered services. Tag your gym in your posts.",
+    "card4Title": "Earn Rewards",
+    "card4Description": "By tagging gyms and interacting on the platform, you accumulate points and unlock exclusive rewards.",
+    "featuresHeading": "Key Features",
+    "Features": {
+      "feature1Title": "Fitness Social Network",
+      "feature1Description": "Connect with other users, share tips, and find workout partners.",
+      "feature2Title": "Content Creation",
+      "feature2Description": "Publish your routines, photos, and training videos, inspire the community.",
+      "feature3Title": "Gamification and Points",
+      "feature3Description": "Earn points by interacting, completing challenges, and tagging gyms in your posts.",
+      "feature4Title": "Detailed Gym Profiles",
+      "feature4Description": "Access complete gym information, including reviews, schedules, and photo gallery.",
+      "feature5Title": "Brand Integration",
+      "feature5Description": "Gyms can create profiles, promote events, and interact directly with members.",
+      "feature6Title": "Personalized Challenges",
+      "feature6Description": "Participate in exclusive challenges created by the community or gyms to stay motivated."
+    },
+    "ctaText": "Ready to start your journey at Gym Explore?",
+    "ctaButton": "Join Gym Explore"
+  }
+}

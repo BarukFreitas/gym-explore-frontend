@@ -1,0 +1,44 @@
+[
+  {
+    "id": "1",
+    "image": "https://blog.sistemapacto.com.br/wp-content/uploads/2022/04/Blog-650x350-segunda-1280x720-1.webp",
+    "name": "Academia Iron Gym",
+    "location": "Rua das Flores, 123"
+  },
+  {
+    "id": "2",
+    "image": "https://i2.wp.com/top10mais.org/wp-content/uploads/2015/01/Quads-Gym-entre-as-maiores-academias-do-mundo.jpg?resize=600%2C330",
+    "name": "Fit Club",
+    "location": "Av. Brasil, 456"
+  },
+  {
+    "id": "3",
+    "image": "https://blog.sistemapacto.com.br/wp-content/uploads/2022/04/bluefit-1024x721.jpg",
+    "name": "Academia Power House",
+    "location": "Rua do Sol, 789"
+  },
+  {
+    "id": "4",
+    "image": "https://blog.sistemapacto.com.br/wp-content/uploads/2022/04/alto-santana-2-de964fb3.jpeg",
+    "name": "Gym Center",
+    "location": "Av. das Palmeiras, 321"
+  },
+  {
+    "id": "5",
+    "image": "https://cdn.progresso.com.br/img/pc/780/530/dn_arquivo/2023/07/red-fitness-foto-interna-cre-769dito-mark-morais.jpg",
+    "name": "Academia Strong Life",
+    "location": "Rua das Acácias, 654"
+  },
+  {
+    "id": "6",
+    "image": "https://classic.exame.com/wp-content/uploads/2016/10/size_960_16_9_acad1.jpeg",
+    "name": "Fitness Prime",
+    "location": "Av. Central, 987"
+  },
+  {
+    "id": "7",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsfSXCxeZuTcTyobMv-sLzofpcENvYoKncI6pKCZgu9pepM59RzqHKo3EtOW6oNz2s77o&usqp=CAU",
+    "name": "Academia Top Shape",
+    "location": "Rua Nova, 159"
+  }
+]

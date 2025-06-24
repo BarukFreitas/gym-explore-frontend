@@ -1,0 +1,106 @@
+{
+  "Navbar": {
+    "home": "Início",
+    "about": "Sobre",
+    "services": "Serviços",
+    "contact": "Contato",
+    "joinNow": "Cadastre-se Agora"
+  },
+  "HeroSection": {
+    "title": "Eleve seu treino",
+    "description": "Transforme seu corpo e mente com equipamentos de ponta, orientação especializada e uma comunidade que te impulsiona. Comece hoje a sua jornada para uma vida mais forte e saudável.",
+    "getStarted": "Começar",
+    "figmaComponent": "Sua Jornada Fitness Começa Aqui"
+  },
+  "Footer": {
+    "aboutUsTitle": "Sobre Nós",
+    "aboutUsText": "Dedicados a ajudá-lo a alcançar seus objetivos de fitness. Oferecemos instalações de primeira linha e orientação especializada.",
+    "quickLinksTitle": "Links Rápidos",
+    "home": "Início",
+    "about": "Sobre",
+    "services": "Serviços",
+    "contact": "Contato",
+    "privacyPolicy": "Política de Privacidade",
+    "termsOfService": "Termos de Serviço",
+    "contactUsTitle": "Contate-nos",
+    "address": "Rua da Academia, 123, Cidade Fitness, CF 12345",
+    "phone": "+55 (11) 98765-4321",
+    "email": "info@gymexplore.com",
+    "allRightsReserved": "© {year} Gym Explore. Todos os direitos reservados."
+  },
+  "AboutPage": {
+    "title": "Sobre Nós",
+    "subtitle": "Nossa História e Missão",
+    "paragraph1": "Na Gym Explore, acreditamos que a boa forma é uma jornada, não um destino. Nossa missão é capacitar indivíduos a alcançar seus objetivos de saúde e bem-estar através de instalações de última geração, orientação especializada e uma comunidade de apoio.",
+    "paragraph2": "Fundada em [Year], a Gym Explore começou com uma visão simples: criar um ambiente acolhedor onde todos, independentemente do seu nível de condicionamento físico, se sintam motivados a superar seus limites. Oferecemos uma ampla gama de equipamentos, programas de treinamento personalizados e diversas aulas em grupo, adaptados para atender às suas necessidades exclusivas.",
+    "paragraph3": "Nossa equipe de instrutores certificados, nutricionistas e coaches de bem-estar dedica-se a fornecer o conhecimento e as ferramentas necessárias para o seu sucesso. Somos apaixonados por promover um estilo de vida saudável e estamos empenhados em ajudá-lo a atingir todo o seu potencial.",
+    "cta": "Junte-se à nossa comunidade hoje e embarque em sua jornada fitness conosco!"
+  },
+  "ContactPage": {
+    "title": "Entre em Contato",
+    "imageAlt": "Ambiente de academia moderno com equipamentos de peso",
+    "formHeading": "Envie-nos uma mensagem",
+    "infoHeading": "Nossas Informações",
+    "Form": {
+      "nameLabel": "Nome Completo",
+      "namePlaceholder": "Seu nome",
+      "nameRequired": "Por favor, insira seu nome completo.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "seuemail@exemplo.com",
+      "emailRequired": "Por favor, insira seu email.",
+      "emailInvalid": "Por favor, insira um email válido.",
+      "subjectLabel": "Assunto",
+      "subjectPlaceholder": "Assunto da mensagem",
+      "subjectRequired": "Por favor, insira o assunto da sua mensagem.",
+      "messageLabel": "Sua Mensagem",
+      "messagePlaceholder": "Digite sua mensagem aqui...",
+      "messageRequired": "Por favor, digite sua mensagem.",
+      "sendButton": "Enviar Mensagem",
+      "sending": "Enviando...",
+      "successMessage": "Mensagem enviada com sucesso! Em breve entraremos em contato.",
+      "errorMessage": "Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente mais tarde."
+    },
+    "Info": {
+      "addressTitle": "Endereço",
+      "addressLine1": "Avenida Paulista, 1578",
+      "addressLine2": "Bela Vista, São Paulo - SP, 01310-200",
+      "phoneTitle": "Telefone",
+      "phoneNumber": "+55 (11) 98765-4321",
+      "emailTitle": "Email",
+      "emailAddress": "contato@gymexplore.com.br",
+      "hoursTitle": "Horário de Funcionamento",
+      "hoursDetails": "Segunda a Sexta: 06h00 - 23h00\nSábado: 08h00 - 18h00\nDomingo: Fechado",
+      "viewOnMap": "Ver no Mapa"
+    }
+  },
+   "ServicesPage": {
+    "title": "Nossos Serviços",
+    "subtitle": "Descubra como a Gym Explore pode transformar sua jornada fitness e conectar você com a comunidade ideal.",
+    "imageAlt": "Pessoas se conectando e treinando em uma academia moderna",
+    "card1Title": "Conecte-se com a Comunidade",
+    "card1Description": "Encontre e siga amigos, descubra novas academias e interaja com uma comunidade de entusiastas do fitness.",
+    "card2Title": "Compartilhe sua Jornada",
+    "card2Description": "Poste sua rotina de treinos, dicas de nutrição e conquistas. Inspire e seja inspirado por outros membros.",
+    "card3Title": "Perfis de Academias",
+    "card3Description": "Explore perfis detalhados de academias, veja avaliações, horários e serviços oferecidos. Marque sua academia em suas postagens.",
+    "card4Title": "Ganhe Recompensas",
+    "card4Description": "Ao marcar academias e interagir na plataforma, você acumula pontos e desbloqueia recompensas exclusivas.",
+    "featuresHeading": "Principais Funcionalidades",
+    "Features": {
+      "feature1Title": "Rede Social Fitness",
+      "feature1Description": "Conecte-se com outros usuários, compartilhe dicas e encontre parceiros de treino.",
+      "feature2Title": "Criação de Conteúdo",
+      "feature2Description": "Publique suas rotinas, fotos e vídeos de treino, inspire a comunidade.",
+      "feature3Title": "Gamificação e Pontos",
+      "feature3Description": "Ganhe pontos ao interagir, completar desafios e marcar academias em suas postagens.",
+      "feature4Title": "Perfis de Academias Detalhados",
+      "feature4Description": "Acesse informações completas de academias, incluindo avaliações, horários e galeria de fotos.",
+      "feature5Title": "Integração de Marcas",
+      "feature5Description": "Academias podem criar perfis, promover eventos e interagir diretamente com os membros.",
+      "feature6Title": "Desafios Personalizados",
+      "feature6Description": "Participe de desafios exclusivos criados pela comunidade ou pelas academias para manter-se motivado."
+    },
+    "ctaText": "Pronto para começar sua jornada na Gym Explore?",
+    "ctaButton": "Junte-se à Gym Explore"
+  }
+}
