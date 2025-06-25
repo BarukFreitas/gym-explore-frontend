@@ -11,10 +11,6 @@ import { useLocale } from 'next-intl';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import gymExploreLogo from '@/public/logo.png';
 import ButtonLogin from '../button/ButtonLogin';
-import NavBarLogado from './NavBarLogado';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from "@/app/store/store";
-import { clearUser } from '../button/loginSlice';
 
 const Navbar = () => {
   const t = useTranslations('Navbar');
@@ -24,15 +20,8 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const { email } = useSelector((state: RootState) => state.auth);
 
   const isContactPage = pathname.includes('/contact') || pathname.includes('/contato');
-
-  const dispatch = useDispatch();
-
-  const handleLogout = () => {
-    dispatch(clearUser());
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,9 +64,6 @@ const Navbar = () => {
 
   return (
     <>
-      {email ? (
-        <NavBarLogado />
-      ) : (
         <nav className={navbarClasses}>
           <div className="container mx-auto flex justify-between items-center">
             <motion.div
@@ -107,7 +93,6 @@ const Navbar = () => {
                 >
                   <Link
                     href={link.href}
-                    onClick={() => handleLogout()}
                     className="text-white hover:text-green-500 font-semibold hover:scale-105 transition-transform duration-300"
                   >
                     {link.label}
@@ -163,7 +148,7 @@ const Navbar = () => {
               ))}
               <li className="mt-4 pt-4 border-t border-gray-700">
                 <Link
-                  href={`/${locale}/join`}
+                  href={`/${locale}/auth`}
                   onClick={handleMobileMenuToggle}
                   className="block bg-green-600 text-white text-center py-2 rounded-md font-semibold hover:bg-green-700 transition-colors duration-300"
                 >
@@ -173,7 +158,6 @@ const Navbar = () => {
             </ul>
           </motion.div>
         </nav>
-      )}
     </>
   );
 };

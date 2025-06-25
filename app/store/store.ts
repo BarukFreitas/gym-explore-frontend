@@ -1,20 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import cardSlice from "../components/card/CardGymSlice"
-import loginSlice from "../components/button/loginSlice";
 import { productsApi } from "./productApi";
+import { authApi } from "./authApi";
+import filterReducer from "../[locale]/(logado)/gyms/filterSlice";
 
 export const store = configureStore({
   reducer: {
-    card: cardSlice,
-    auth: loginSlice,
-    [productsApi.reducerPath]: productsApi.reducer
+    [productsApi.reducerPath]: productsApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
+    filter: filterReducer,
   },
-  middleware: (getDefaultMiddleware) => 
-    getDefaultMiddleware().concat(productsApi.middleware)
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(productsApi.middleware, authApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-export default store;

@@ -102,5 +102,20 @@
     },
     "ctaText": "Ready to start your journey at Gym Explore?",
     "ctaButton": "Join Gym Explore"
-  }
+  },
+  "AuthPage": {
+  "loginTitle": "Log In to Your Account",
+  "registerTitle": "Create New Account",
+  "usernameLabel": "Username",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "loginButton": "Log In",
+  "registerButton": "Register",
+  "dontHaveAccount": "Don't have an account? Sign Up!",
+  "alreadyHaveAccount": "Already have an account? Log In!",
+  "loginSuccessMessage": "Login successful! Redirecting...",
+  "registerSuccessMessage": "Registration successful! Please log in to continue.",
+  "loginGenericErrorMessage": "Error trying to log in. Please check your credentials.",
+  "registerGenericErrorMessage": "Error trying to register. Please check the data."
+}
 }

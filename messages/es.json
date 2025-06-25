@@ -102,5 +102,20 @@
     },
     "ctaText": "¿Listo para comenzar tu viaje en Gym Explore?",
     "ctaButton": "Únete a Gym Explore"
-  }
+  },
+  "AuthPage": {
+  "loginTitle": "Iniciar Sesión en Tu Cuenta",
+  "registerTitle": "Crear Nueva Cuenta",
+  "usernameLabel": "Nombre de Usuario",
+  "emailLabel": "Correo Electrónico",
+  "passwordLabel": "Contraseña",
+  "loginButton": "Iniciar Sesión",
+  "registerButton": "Registrarse",
+  "dontHaveAccount": "¿No tienes una cuenta? ¡Regístrate!",
+  "alreadyHaveAccount": "¿Ya tienes una cuenta? ¡Inicia Sesión!",
+  "loginSuccessMessage": "¡Inicio de sesión exitoso! Redireccionando...",
+  "registerSuccessMessage": "¡Registro exitoso! Por favor, inicia sesión para continuar.",
+  "loginGenericErrorMessage": "Error al intentar iniciar sesión. Por favor, verifica tus credenciales.",
+  "registerGenericErrorMessage": "Error al intentar registrar. Por favor, verifica los datos."
+}
 }
