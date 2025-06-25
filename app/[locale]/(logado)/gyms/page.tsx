@@ -3,12 +3,9 @@
 import { useEffect, useState } from "react";
 import ListCard from "@/app/components/listCard/ListCardGym";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/store/store";
 import Loading from "@/app/components/loading/Loading";
 import { useGetAllProductsQuery } from "@/app/store/productApi";
 
-// 🔥 Tipo do produto (pode ajustar se quiser mais campos)
 interface Product {
   id: number;
   title: string;
@@ -25,8 +22,7 @@ const PAGE_SIZE = 10;
 
 export default function Gyms() {
   const router = useRouter();
-  const { email } = useSelector((state: RootState) => state.auth);
-  const [checking, setChecking] = useState(true);
+  const [checking, setChecking] = useState(false);
   const [page, setPage] = useState(0);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
 
@@ -34,14 +30,6 @@ export default function Gyms() {
     limit: PAGE_SIZE,
     skip: page * PAGE_SIZE,
   });
-
-  useEffect(() => {
-    if (email === null) {
-      router.push("/");
-    } else {
-      setTimeout(() => setChecking(false), 2000);
-    }
-  }, [email, router]);
 
   useEffect(() => {
     if (products && products.length > 0) {
@@ -59,7 +47,7 @@ export default function Gyms() {
     } else if (page === 0) {
       setAllProducts([]);
     }
-  }, [page, email, products]);
+  }, [page, products]);
 
   if (checking) return <Loading />;
   if (isLoading && allProducts.length === 0) return <Loading />;

@@ -62,13 +62,17 @@ export default function AuthPage() {
   const handleLoginSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const result = await loginUser({ username: loginUsername, password: loginPassword }).unwrap();
+      const mutationResult = loginUser({ username: loginUsername, password: loginPassword });
+      // ADICIONADO: Log do resultado da mutação antes de 'unwrap'
+      console.log("Resultado da Mutação (antes de unwrap):", mutationResult);
+
+      const result = await mutationResult.unwrap(); // Aqui a promessa é resolvida ou rejeitada
       console.log("Login bem-sucedido:", result);
 
-      // Use a variável 'locale' que você obteve do useLocale()
       router.push(`/${locale}/gyms`);
     } catch (err: any) {
-      console.error("Falha no login:", err);
+      // MODIFICADO: Log do erro com mais detalhes
+      console.error("Falha no login (erro detalhado):", err);
     }
   };
 
