@@ -1,4 +1,3 @@
-
 export interface UserRegisterRequest {
   username: string;
   email: string;

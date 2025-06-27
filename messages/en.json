@@ -4,7 +4,10 @@
     "about": "About",
     "services": "Services",
     "contact": "Contact",
-    "joinNow": "Join Now"
+    "joinNow": "Join Now",
+    "logoutButton": "Logout",
+    "feed": "Feed",
+    "gyms": "Gyms"
   },
   "HeroSection": {
     "title": "Elevate your workout",
@@ -23,8 +26,8 @@
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
     "contactUsTitle": "Contact Us",
-    "address": "123 Fitness Ave, Gym City, GC 12345",
-    "phone": "+1 (123) 456-7890",
+    "address": "Fitness Avenue, 123, Gym City, GC 12345",
+    "phone": "+55 (11) 98765-4321",
     "email": "info@gymexplore.com",
     "allRightsReserved": "© {year} Gym Explore. All rights reserved."
   },
@@ -33,7 +36,7 @@
     "subtitle": "Our Story and Mission",
     "paragraph1": "At Gym Explore, we believe that fitness is a journey, not a destination. Our mission is to empower individuals to achieve their health and wellness goals through state-of-the-art facilities, expert guidance, and a supportive community.",
     "paragraph2": "Founded in [Year], Gym Explore started with a simple vision: to create a welcoming environment where everyone, regardless of their fitness level, feels motivated to push their limits. We offer a wide range of equipment, personalized training programs, and diverse group classes tailored to meet your unique needs.",
-    "paragraph3": "Our team of certified trainers, nutritionists, and wellness coaches is dedicated to providing you with the knowledge and tools you need to succeed. We are passionate about fostering a healthy lifestyle and are committed to helping you unlock your full potential.",
+    "paragraph3": "Our team of certified instructors, nutritionists, and wellness coaches is dedicated to providing you with the knowledge and tools you need to succeed. We are passionate about fostering a healthy lifestyle and are committed to helping you unlock your full potential.",
     "cta": "Join our community today and embark on your fitness journey with us!"
   },
   "ContactPage": {
@@ -104,18 +107,30 @@
     "ctaButton": "Join Gym Explore"
   },
   "AuthPage": {
-  "loginTitle": "Log In to Your Account",
-  "registerTitle": "Create New Account",
-  "usernameLabel": "Username",
-  "emailLabel": "Email",
-  "passwordLabel": "Password",
-  "loginButton": "Log In",
-  "registerButton": "Register",
-  "dontHaveAccount": "Don't have an account? Sign Up!",
-  "alreadyHaveAccount": "Already have an account? Log In!",
-  "loginSuccessMessage": "Login successful! Redirecting...",
-  "registerSuccessMessage": "Registration successful! Please log in to continue.",
-  "loginGenericErrorMessage": "Error trying to log in. Please check your credentials.",
-  "registerGenericErrorMessage": "Error trying to register. Please check the data."
+    "loginTitle": "Log In to Your Account",
+    "registerTitle": "Create New Account",
+    "usernameLabel": "Username",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "loginButton": "Log In",
+    "registerButton": "Register",
+    "dontHaveAccount": "Don't have an account? Sign Up!",
+    "alreadyHaveAccount": "Already have an account? Log In!",
+    "loginSuccessMessage": "Login successful! Redirecting...",
+    "registerSuccessMessage": "Registration successful! Please log in to continue.",
+    "loginGenericErrorMessage": "Error trying to log in. Please check your credentials.",
+    "registerGenericErrorMessage": "Error trying to register. Please check the data."
+  },
+"FeedPage": {
+  "feedTitle": "Activity Feed",
+  "newPostPlaceholder": "Share your workout routine, tips, or achievements here...",
+  "postButton": "Post",
+  "recentPostsTitle": "Recent Posts",
+  "noPostsYet": "No posts to display. Be the first to share!",
+  "emptyPostError": "Your post cannot be empty.",
+  "notLoggedInToPostError": "You must be logged in to create a post.",
+  "genericPostError": "An error occurred while trying to publish. Please try again.",
+  "postSuccessMessage": "Post published successfully!",
+  "errorLoadingPosts": "Error loading posts. Please try refreshing the page."
 }
 }

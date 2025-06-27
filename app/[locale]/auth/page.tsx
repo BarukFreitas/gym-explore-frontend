@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
+import { useDispatch } from "react-redux";
 
 import {
   Container,
@@ -16,6 +17,7 @@ import {
 } from "@mui/material";
 
 import { useLoginUserMutation, useRegisterUserMutation } from "@/app/store/authApi";
+import { setCredentials } from "@/app/store/authSlice";
 import {
   UserLoginRequest,
   UserRegisterRequest,
@@ -27,6 +29,7 @@ export default function AuthPage() {
   const t = useTranslations("AuthPage");
   const router = useRouter();
   const locale = useLocale();
+  const dispatch = useDispatch();
 
   const [isLoginMode, setIsLoginMode] = useState(true);
 
@@ -44,7 +47,6 @@ export default function AuthPage() {
       isSuccess: isLoginSuccess,
       isError: isLoginError,
       error: loginError,
-      data: loginData,
     },
   ] = useLoginUserMutation();
 
@@ -55,7 +57,6 @@ export default function AuthPage() {
       isSuccess: isRegisterSuccess,
       isError: isRegisterError,
       error: registerError,
-      data: registerData,
     },
   ] = useRegisterUserMutation();
 
@@ -63,15 +64,15 @@ export default function AuthPage() {
     event.preventDefault();
     try {
       const mutationResult = loginUser({ username: loginUsername, password: loginPassword });
-      // ADICIONADO: Log do resultado da mutação antes de 'unwrap'
       console.log("Resultado da Mutação (antes de unwrap):", mutationResult);
 
-      const result = await mutationResult.unwrap(); // Aqui a promessa é resolvida ou rejeitada
+      const result = await mutationResult.unwrap();
       console.log("Login bem-sucedido:", result);
+
+      dispatch(setCredentials({ id: result.id, username: result.username, email: result.email }));
 
       router.push(`/${locale}/gyms`);
     } catch (err: any) {
-      // MODIFICADO: Log do erro com mais detalhes
       console.error("Falha no login (erro detalhado):", err);
     }
   };
@@ -85,54 +86,49 @@ export default function AuthPage() {
         password: registerPassword,
       }).unwrap();
       console.log("Registro bem-sucedido:", result);
+
+      dispatch(setCredentials({ id: result.id, username: result.username, email: result.email }));
+
       setIsLoginMode(true);
       alert(t('registerSuccessMessage'));
+      router.push(`/${locale}/gyms`);
     } catch (err: any) {
       console.error("Falha no registro:", err);
     }
   };
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 8, mb: 8 }}>
+    <div className="flex items-center justify-center min-h-screen py-8">
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: 4,
-          borderRadius: 2,
-          boxShadow: 3,
-          bgcolor: "background.paper",
-        }}
-      >
-        <Typography variant="h4" component="h1" gutterBottom>
+        className="flex flex-col items-center p-8 rounded-lg shadow-xl bg-white max-w-sm w-full">
+        <Typography variant="h4" component="h1" gutterBottom className="mb-4 text-center">
           {isLoginMode ? t("loginTitle") : t("registerTitle")}
         </Typography>
 
         {isLoginSuccess && (
-          <Alert severity="success" sx={{ width: "100%", mb: 2 }}>
+          <Alert severity="success" className="w-full mb-4">
             {t('loginSuccessMessage')}
           </Alert>
         )}
         {isLoginError && (
-          <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
+          <Alert severity="error" className="w-full mb-4">
             {(loginError as ErrorResponse)?.error || t("loginGenericErrorMessage")}
           </Alert>
         )}
 
         {isRegisterSuccess && (
-          <Alert severity="success" sx={{ width: "100%", mb: 2 }}>
+          <Alert severity="success" className="w-full mb-4">
             {t('registerSuccessMessage')}
           </Alert>
         )}
         {isRegisterError && (
-          <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
+          <Alert severity="error" className="w-full mb-4">
             {(registerError as ErrorResponse)?.error || t("registerGenericErrorMessage")}
           </Alert>
         )}
 
         {isLoginMode ? (
-          <Box component="form" onSubmit={handleLoginSubmit} sx={{ mt: 2, width: "100%" }}>
+          <Box component="form" onSubmit={handleLoginSubmit} className="mt-4 w-full">
             <TextField
               margin="normal"
               required
@@ -144,6 +140,7 @@ export default function AuthPage() {
               autoFocus
               value={loginUsername}
               onChange={(e) => setLoginUsername(e.target.value)}
+              className="mb-4"
             />
             <TextField
               margin="normal"
@@ -156,12 +153,13 @@ export default function AuthPage() {
               autoComplete="current-password"
               value={loginPassword}
               onChange={(e) => setLoginPassword(e.target.value)}
+              className="mb-4"
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, bgcolor: "#4CAF50", "&:hover": { bgcolor: "#45A049" } }}
+              className="mt-6 mb-4 bg-green-600 hover:bg-green-700 text-white"
               disabled={isLoginLoading}
             >
               {isLoginLoading ? <CircularProgress size={24} color="inherit" /> : t("loginButton")}
@@ -170,13 +168,13 @@ export default function AuthPage() {
               component="button"
               variant="body2"
               onClick={() => setIsLoginMode(false)}
-              sx={{ width: "100%", textAlign: "center", mt: 1 }}
+              className="w-full text-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
             >
               {t("dontHaveAccount")}
             </MuiLink>
           </Box>
         ) : (
-          <Box component="form" onSubmit={handleRegisterSubmit} sx={{ mt: 2, width: "100%" }}>
+          <Box component="form" onSubmit={handleRegisterSubmit} className="mt-4 w-full">
             <TextField
               margin="normal"
               required
@@ -188,6 +186,7 @@ export default function AuthPage() {
               autoFocus
               value={registerUsername}
               onChange={(e) => setRegisterUsername(e.target.value)}
+              className="mb-4"
             />
             <TextField
               margin="normal"
@@ -200,6 +199,7 @@ export default function AuthPage() {
               type="email"
               value={registerEmail}
               onChange={(e) => setRegisterEmail(e.target.value)}
+              className="mb-4"
             />
             <TextField
               margin="normal"
@@ -212,12 +212,13 @@ export default function AuthPage() {
               autoComplete="new-password"
               value={registerPassword}
               onChange={(e) => setRegisterPassword(e.target.value)}
+              className="mb-4"
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, bgcolor: "#4CAF50", "&:hover": { bgcolor: "#45A049" } }}
+              className="mt-6 mb-4 bg-green-600 hover:bg-green-700 text-white"
               disabled={isRegisterLoading}
             >
               {isRegisterLoading ? <CircularProgress size={24} color="inherit" /> : t("registerButton")}
@@ -226,13 +227,13 @@ export default function AuthPage() {
               component="button"
               variant="body2"
               onClick={() => setIsLoginMode(true)}
-              sx={{ width: "100%", textAlign: "center", mt: 1 }}
+              className="w-full text-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
             >
               {t("alreadyHaveAccount")}
             </MuiLink>
           </Box>
         )}
       </Box>
-    </Container>
+    </div>
   );
 }

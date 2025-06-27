@@ -1,3 +1,4 @@
+// app/components/header/NavBar.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -11,6 +12,10 @@ import { useLocale } from 'next-intl';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import gymExploreLogo from '@/public/logo.png';
 import ButtonLogin from '../button/ButtonLogin';
+import NavBarLogado from './NavBarLogado';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "@/app/store/store";
+import { clearCredentials } from "@/app/store/authSlice";
 
 const Navbar = () => {
   const t = useTranslations('Navbar');
@@ -21,7 +26,16 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const username = useSelector((state: RootState) => state.auth.username);
+
   const isContactPage = pathname.includes('/contact') || pathname.includes('/contato');
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(clearCredentials());
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,11 +60,13 @@ const Navbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  // REMOVER O LINK 'FEED' DAQUI
   const navLinks = [
     { label: t("home"), href: `/${locale}/` },
     { label: t("about"), href: `/${locale}/sobre` },
     { label: t("services"), href: `/${locale}/servicos` },
     { label: t("contact"), href: `/${locale}/contato` },
+    // { label: t("feed"), href: `/${locale}/feed` }, // <-- REMOVA ESTA LINHA
   ];
 
   const navbarClasses = `
@@ -64,6 +80,9 @@ const Navbar = () => {
 
   return (
     <>
+      {isLoggedIn ? (
+        <NavBarLogado onLogout={handleLogout} username={username || "Usuário"} />
+      ) : (
         <nav className={navbarClasses}>
           <div className="container mx-auto flex justify-between items-center">
             <motion.div
@@ -107,7 +126,7 @@ const Navbar = () => {
               transition={{ duration: 0.5 }}
               className="hidden md:block"
             >
-              <ButtonLogin />
+              {!isLoggedIn && <ButtonLogin />}
             </motion.div>
 
             <div className="md:hidden">
@@ -147,17 +166,28 @@ const Navbar = () => {
                 </li>
               ))}
               <li className="mt-4 pt-4 border-t border-gray-700">
-                <Link
-                  href={`/${locale}/auth`}
-                  onClick={handleMobileMenuToggle}
-                  className="block bg-green-600 text-white text-center py-2 rounded-md font-semibold hover:bg-green-700 transition-colors duration-300"
-                >
-                  {t("joinNow")}
-                </Link>
+                {!isLoggedIn && (
+                  <Link
+                    href={`/${locale}/auth`}
+                    onClick={handleMobileMenuToggle}
+                    className="block bg-green-600 text-white text-center py-2 rounded-md font-semibold hover:bg-green-700 transition-colors duration-300"
+                  >
+                    {t("joinNow")}
+                  </Link>
+                )}
+                {isLoggedIn && (
+                  <button
+                    onClick={() => { handleLogout(); handleMobileMenuToggle(); }}
+                    className="block bg-red-600 text-white text-center py-2 rounded-md font-semibold hover:bg-red-700 transition-colors duration-300 w-full"
+                  >
+                    {t("logoutButton")}
+                  </button>
+                )}
               </li>
             </ul>
           </motion.div>
         </nav>
+      )}
     </>
   );
 };
