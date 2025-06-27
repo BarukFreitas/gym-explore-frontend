@@ -4,7 +4,10 @@
     "about": "Sobre",
     "services": "Serviços",
     "contact": "Contato",
-    "joinNow": "Cadastre-se Agora"
+    "joinNow": "Cadastre-se Agora",
+    "logoutButton": "Sair",
+    "feed": "Feed",
+    "gyms": "Academias"
   },
   "HeroSection": {
     "title": "Eleve seu treino",
@@ -117,5 +120,17 @@
     "registerSuccessMessage": "Cadastro realizado com sucesso! Faça login para continuar.",
     "loginGenericErrorMessage": "Erro ao tentar fazer login. Verifique suas credenciais.",
     "registerGenericErrorMessage": "Erro ao tentar registrar. Verifique os dados."
+  },
+  "FeedPage": {
+    "feedTitle": "Feed de Atividades",
+    "newPostPlaceholder": "Compartilhe sua rotina de exercícios, dicas ou conquistas aqui...",
+    "postButton": "Publicar",
+    "recentPostsTitle": "Publicações Recentes",
+    "noPostsYet": "Nenhuma publicação para exibir. Seja o primeiro a compartilhar!",
+    "emptyPostError": "Sua postagem não pode estar vazia.",
+    "notLoggedInToPostError": "Você precisa estar logado para criar uma postagem.",
+    "genericPostError": "Ocorreu um erro ao tentar publicar. Tente novamente.",
+    "postSuccessMessage": "Postagem publicada com sucesso!",
+    "errorLoadingPosts": "Erro ao carregar as postagens. Tente recarregar a página."
   }
 }

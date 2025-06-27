@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 import ListCard from "@/app/components/listCard/ListCardGym";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store/store";
 import Loading from "@/app/components/loading/Loading";
 import { useGetAllProductsQuery } from "@/app/store/productApi";
+import { useLocale } from "next-intl";
 
 interface Product {
   id: number;
@@ -22,7 +25,10 @@ const PAGE_SIZE = 10;
 
 export default function Gyms() {
   const router = useRouter();
-  const [checking, setChecking] = useState(false);
+  const locale = useLocale();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
   const [page, setPage] = useState(0);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
 
@@ -30,6 +36,19 @@ export default function Gyms() {
     limit: PAGE_SIZE,
     skip: page * PAGE_SIZE,
   });
+
+  useEffect(() => {
+    if (checkingAuth) {
+        const timer = setTimeout(() => {
+            if (!isLoggedIn) {
+                router.push(`/${locale}/`);
+            } else {
+                setCheckingAuth(false);
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }
+  }, [isLoggedIn, router, checkingAuth, locale]);
 
   useEffect(() => {
     if (products && products.length > 0) {
@@ -49,7 +68,9 @@ export default function Gyms() {
     }
   }, [page, products]);
 
-  if (checking) return <Loading />;
+  if (checkingAuth) return <Loading />;
+  if (!isLoggedIn) return <Loading />;
+
   if (isLoading && allProducts.length === 0) return <Loading />;
   if (error) return <p>Erro ao buscar academias.</p>;
 
