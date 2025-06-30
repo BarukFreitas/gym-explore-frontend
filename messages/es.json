@@ -124,6 +124,7 @@
 "FeedPage": {
   "feedTitle": "Feed de Actividad",
   "newPostPlaceholder": "Comparte tu rutina de entrenamiento, consejos o logros aquí...",
+  "imageUrlPlaceholder": "URL de la Imagen (opcional)",
   "postButton": "Publicar",
   "recentPostsTitle": "Publicaciones Recientes",
   "noPostsYet": "No hay publicaciones para mostrar. ¡Sé el primero en compartir!",

@@ -124,6 +124,7 @@
 "FeedPage": {
   "feedTitle": "Activity Feed",
   "newPostPlaceholder": "Share your workout routine, tips, or achievements here...",
+  "imageUrlPlaceholder": "Image URL (optional)",
   "postButton": "Post",
   "recentPostsTitle": "Recent Posts",
   "noPostsYet": "No posts to display. Be the first to share!",
