@@ -6,11 +6,9 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import Loading from "@/app/components/loading/Loading";
-// 1. Importe o hook correto da sua nova API de academias
-import { useGetAllGymsQuery } from "@/app/store/gymsApi"; // << MUDANÇA
+import { useGetAllGymsQuery } from "@/app/store/gymsApi";
 import { useLocale } from "next-intl";
-
-
+import Link from 'next/link';
 
 export default function Gyms() {
   const router = useRouter();
@@ -18,11 +16,8 @@ export default function Gyms() {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
-  // 3. Chame o novo hook para buscar as academias.
-  //    Ele não precisa de parâmetros como limit/skip.
-  const { data: gyms, isLoading, error } = useGetAllGymsQuery(); // << MUDANÇA
+  const { data: gyms, isLoading, error } = useGetAllGymsQuery();
 
-  // Lógica de autenticação (permanece a mesma)
   useEffect(() => {
     if (checkingAuth) {
       const timer = setTimeout(() => {
@@ -36,23 +31,25 @@ export default function Gyms() {
     }
   }, [isLoggedIn, router, checkingAuth, locale]);
 
-  // 4. Remova os `useEffect` que gerenciavam a paginação e o estado `allProducts`.
-  //    Isso não é mais necessário, pois `useGetAllGymsQuery` já nos dá a lista completa.
-
-  // Lógica de renderização de estado (carregando, erro)
   if (checkingAuth) return <Loading />;
   if (!isLoggedIn) return <Loading />;
-  if (isLoading) return <Loading />; // Simplificado
+  if (isLoading) return <Loading />;
   if (error) return <p>Erro ao buscar academias.</p>;
 
   return (
-      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <h1 className="text-4xl font-bold">Academias em destaque</h1>
+      <div className="w-full max-w-7xl mx-auto p-4 sm:p-8">
+        <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
+          <h1 className="text-4xl font-bold">Academias em destaque</h1>
 
-        {/* 5. Passe a lista de academias para o componente ListCard */}
-        {/* e renomeie a propriedade para algo como 'gyms' */}
-        <ListCard gyms={gyms || []} />
+          <Link
+              href={`/${locale}/gyms/create`}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200"
+          >
+            Adicionar Nova Academia
+          </Link>
+        </div>
 
+        {gyms && <ListCard gyms={gyms} />}
       </div>
   );
 }
