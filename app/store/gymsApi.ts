@@ -26,6 +26,11 @@ export interface ReviewCreatePayload {
 
 export type GymCreatePayload = Omit<Gym, 'id'>;
 
+export type GymUpdatePayload = {
+    id: number;
+    body: GymCreatePayload;
+};
+
 export const gymsApi = createApi({
     reducerPath: "gymsApi",
     baseQuery: fetchBaseQuery({
@@ -66,6 +71,26 @@ export const gymsApi = createApi({
             }),
             invalidatesTags: (result, error, { gymId }) => [{ type: 'Review', id: gymId }],
         }),
+
+        updateGym: builder.mutation<Gym, GymUpdatePayload>({
+            query: ({ id, body }) => ({
+                url: `gyms/${id}`,
+                method: 'PUT',
+                body,
+            }),
+            invalidatesTags: (result, error, { id }) => [{ type: 'Gym', id: 'LIST' }, { type: 'Gym', id }],
+        }),
+
+        // MUTATION PARA EXCLUIR UMA ACADEMIA
+        deleteGym: builder.mutation<{ success: boolean; id: number }, number>({
+            query(id) {
+                return {
+                    url: `gyms/${id}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: (result, error, id) => [{ type: 'Gym', id: 'LIST' }],
+        }),
     }),
 });
 
@@ -73,5 +98,7 @@ export const {
     useGetAllGymsQuery,
     useGetReviewsByGymIdQuery,
     useAddGymMutation,
-    useAddReviewMutation
+    useAddReviewMutation,
+    useUpdateGymMutation,
+    useDeleteGymMutation
 } = gymsApi;
