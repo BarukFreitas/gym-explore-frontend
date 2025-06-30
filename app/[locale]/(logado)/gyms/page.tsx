@@ -6,22 +6,11 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import Loading from "@/app/components/loading/Loading";
-import { useGetAllProductsQuery } from "@/app/store/productApi";
+// 1. Importe o hook correto da sua nova API de academias
+import { useGetAllGymsQuery } from "@/app/store/gymsApi"; // << MUDANÇA
 import { useLocale } from "next-intl";
 
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  images: string[];
-  reviews: {
-    rating: number;
-    comment: string;
-    reviewerName: string;
-  }[];
-}
 
-const PAGE_SIZE = 10;
 
 export default function Gyms() {
   const router = useRouter();
@@ -29,65 +18,41 @@ export default function Gyms() {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
-  const [page, setPage] = useState(0);
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  // 3. Chame o novo hook para buscar as academias.
+  //    Ele não precisa de parâmetros como limit/skip.
+  const { data: gyms, isLoading, error } = useGetAllGymsQuery(); // << MUDANÇA
 
-  const { data: products, isLoading, error } = useGetAllProductsQuery({
-    limit: PAGE_SIZE,
-    skip: page * PAGE_SIZE,
-  });
-
+  // Lógica de autenticação (permanece a mesma)
   useEffect(() => {
     if (checkingAuth) {
-        const timer = setTimeout(() => {
-            if (!isLoggedIn) {
-                router.push(`/${locale}/`);
-            } else {
-                setCheckingAuth(false);
-            }
-        }, 500);
-        return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        if (!isLoggedIn) {
+          router.push(`/${locale}/`);
+        } else {
+          setCheckingAuth(false);
+        }
+      }, 500);
+      return () => clearTimeout(timer);
     }
   }, [isLoggedIn, router, checkingAuth, locale]);
 
-  useEffect(() => {
-    if (products && products.length > 0) {
-      setAllProducts((prev) => {
-        const ids = new Set(prev.map((p) => p.id));
-        const novos = products.filter((p) => !ids.has(p.id));
-        return [...prev, ...novos];
-      });
-    }
-  }, [products]);
+  // 4. Remova os `useEffect` que gerenciavam a paginação e o estado `allProducts`.
+  //    Isso não é mais necessário, pois `useGetAllGymsQuery` já nos dá a lista completa.
 
-  useEffect(() => {
-    if (page === 0 && products && products.length > 0) {
-      setAllProducts(products);
-    } else if (page === 0) {
-      setAllProducts([]);
-    }
-  }, [page, products]);
-
+  // Lógica de renderização de estado (carregando, erro)
   if (checkingAuth) return <Loading />;
   if (!isLoggedIn) return <Loading />;
-
-  if (isLoading && allProducts.length === 0) return <Loading />;
+  if (isLoading) return <Loading />; // Simplificado
   if (error) return <p>Erro ao buscar academias.</p>;
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <h1 className="text-4xl font-bold">Academias em destaque</h1>
-      <ListCard products={allProducts} />
+      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        <h1 className="text-4xl font-bold">Academias em destaque</h1>
 
-      <div className="flex gap-4 mt-8">
-        <button
-          className="px-4 py-2 bg-white text-black rounded disabled:opacity-50"
-          onClick={() => setPage((p) => p + 1)}
-          disabled={!products || products.length < PAGE_SIZE}
-        >
-          Carregar mais
-        </button>
+        {/* 5. Passe a lista de academias para o componente ListCard */}
+        {/* e renomeie a propriedade para algo como 'gyms' */}
+        <ListCard gyms={gyms || []} />
+
       </div>
-    </div>
   );
 }
