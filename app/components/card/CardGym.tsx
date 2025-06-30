@@ -1,33 +1,66 @@
-// Dentro do seu arquivo CardGym.js ou .tsx
+"use client";
 
-interface Gym {
-  id: number;
-  name: string;
-  address: string;
-  phone: string;
-  imageUrl: string;
-}
+import React, { useState } from 'react';
+import { useGetReviewsByGymIdQuery, type Gym, type Review } from '@/app/store/gymsApi';
 
-// Defina as props que o Card recebe
 interface GymCardProps {
-  gym: Gym;
+    gym: Gym;
 }
 
-// Receba a prop 'gym'
-export default function GymCard({ gym }: GymCardProps) {
-  return (
-      <div className="gym-card bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden w-80">
-        {/* Use os dados da academia */}
-        <img
-            src={gym.imageUrl}
-            alt={`Foto da ${gym.name}`}
-            className="w-full h-48 object-cover"
-        />
-        <div className="p-4">
-          <h2 className="text-2xl font-bold mb-2">{gym.name}</h2>
-          <p className="text-gray-400 mb-1"><strong>Endereço:</strong> {gym.address}</p>
-          <p className="text-gray-400"><strong>Telefone:</strong> {gym.phone}</p>
+const ReviewItem = ({ review }: { review: Review }) => (
+    <div className="border-t border-gray-600 p-3">
+        <div className="flex justify-between items-center">
+            <span className="font-bold text-sm">{review.userName}</span>
+            <span className="text-yellow-400 text-sm">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
         </div>
-      </div>
-  );
+        <p className="text-gray-300 text-sm mt-1">{review.comment}</p>
+    </div>
+);
+
+
+export default function GymCard({ gym }: GymCardProps) {
+    const [showReviews, setShowReviews] = useState(false);
+
+    const {
+        data: reviews,
+        isLoading: isLoadingReviews,
+        error: reviewsError
+    } = useGetReviewsByGymIdQuery(gym.id, {
+        skip: !showReviews,
+    });
+
+    return (
+        <div className="gym-card bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden w-full max-w-sm flex flex-col">
+            <img
+                src={gym.imageUrl}
+                alt={`Foto da ${gym.name}`}
+                className="w-full h-48 object-cover"
+            />
+            <div className="p-4 flex-grow">
+                <h2 className="text-2xl font-bold mb-2">{gym.name}</h2>
+                <p className="text-gray-400 mb-1"><strong>Endereço:</strong> {gym.address}</p>
+                <p className="text-gray-400"><strong>Telefone:</strong> {gym.phone}</p>
+            </div>
+
+            <div className="border-t border-gray-700 p-4">
+                <button
+                    onClick={() => setShowReviews(!showReviews)}
+                    className="text-center w-full bg-gray-700 hover:bg-gray-600 p-2 rounded-md text-sm"
+                >
+                    {showReviews ? 'Ocultar Avaliações' : `Mostrar Avaliações`}
+                </button>
+
+                {showReviews && (
+                    <div className="mt-4">
+                        {isLoadingReviews && <p>Carregando avaliações...</p>}
+                        {reviewsError && <p className="text-red-400">Erro ao carregar avaliações.</p>}
+                        {reviews && reviews.length > 0 && reviews.map(review => (
+                            <ReviewItem key={review.id} review={review} />
+                        ))}
+                        {reviews && reviews.length === 0 && <p className="text-sm text-gray-400 mt-2">Nenhuma avaliação ainda.</p>}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 }

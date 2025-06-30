@@ -1,38 +1,33 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// 1. Defina uma interface que corresponda à sua entidade Gym do backend
-interface Gym {
+export interface Gym {
     id: number;
     name: string;
     address: string;
     phone: string;
-    imageUrl: string; // Corresponde ao campo no seu DTO e Entidade
+    imageUrl: string;
 }
 
-// 2. Renomeie a API para algo mais descritivo, como "gymsApi"
-export const gymsApi = createApi({
-    reducerPath: "gymsApi", // Nome único para o reducer
+export interface Review {
+    id: number;
+    comment: string;
+    rating: number;
+    creationDate: string;
+    gymId: number;
+    userName:string;
+}
 
-    // 3. Altere a baseUrl para a URL do seu backend
+export type GymCreatePayload = Omit<Gym, 'id'>;
+
+export const gymsApi = createApi({
+    reducerPath: "gymsApi",
     baseQuery: fetchBaseQuery({
         baseUrl: "http://localhost:8080/",
     }),
-
-    // 4. Defina o tipo de "tag" para o caching. Usaremos 'Gym'
-    tagTypes: ["Gym"],
-
+    tagTypes: ["Gym", "Review"],
     endpoints: (builder) => ({
-        // 5. Renomeie o endpoint para refletir o que ele busca
-        getAllGyms: builder.query<Gym[], void>({ // Recebe um array de Gym e não precisa de argumentos (void)
-
-            // 6. Aponte a URL para o seu endpoint de academias
+        getAllGyms: builder.query<Gym[], void>({
             query: () => "gyms",
-
-            // 7. A função 'transformResponse' não é mais necessária,
-            // pois sua API já retorna o array de academias diretamente.
-
-            // 8. Configure as tags para o cache automático.
-            // Isso ajuda a recarregar a lista quando você adiciona, edita ou exclui uma academia.
             providesTags: (result) =>
                 result
                     ? [
@@ -42,13 +37,24 @@ export const gymsApi = createApi({
                     : [{ type: "Gym", id: "LIST" }],
         }),
 
-        // Você pode adicionar os outros endpoints (create, update, delete) aqui no futuro
-        // Ex:
-        // createGym: builder.mutation<Gym, Partial<Gym>>({ ... }),
-        // updateGym: builder.mutation<Gym, { id: number; body: Partial<Gym> }>({ ... }),
-        // deleteGym: builder.mutation<{ success: boolean; id: number }, number>({ ... }),
+        getReviewsByGymId: builder.query<Review[], number>({
+            query: (gymId) => `reviews/gym/${gymId}`, // Diz como construir a URL
+            providesTags: (result, error, gymId) => [{ type: 'Review', id: gymId }],
+        }),
+
+        addGym: builder.mutation<Gym, GymCreatePayload>({
+            query: (newGym) => ({
+                url: 'gyms',
+                method: 'POST',
+                body: newGym,
+            }),
+            invalidatesTags: [{ type: 'Gym', id: 'LIST' }],
+        }),
     }),
 });
 
-// 9. Exporte o novo hook com o nome correto
-export const { useGetAllGymsQuery } = gymsApi;
+export const {
+    useGetAllGymsQuery,
+    useGetReviewsByGymIdQuery,
+    useAddGymMutation
+} = gymsApi;

@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-// 1. IMPORTE A SUA NOVA API DE ACADEMIAS
 import { gymsApi } from "./gymsApi";
 import { productsApi } from "./productApi";
 import { authApi } from "./authApi";
@@ -30,7 +29,6 @@ const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 
 export const store = configureStore({
   reducer: {
-    // 2. ADICIONE O REDUCER DA SUA API DE ACADEMIAS
     [gymsApi.reducerPath]: gymsApi.reducer,
     [productsApi.reducerPath]: productsApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
@@ -43,7 +41,6 @@ export const store = configureStore({
         serializableCheck: {
           ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         },
-        // 3. ADICIONE O MIDDLEWARE DA SUA API DE ACADEMIAS
       }).concat(gymsApi.middleware, productsApi.middleware, authApi.middleware, postApi.middleware),
 });
 
