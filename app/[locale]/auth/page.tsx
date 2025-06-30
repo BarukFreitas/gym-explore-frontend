@@ -1,239 +1,161 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useTranslations, useLocale } from "next-intl";
-import { useDispatch } from "react-redux";
-
 import {
   Container,
-  Typography,
   Box,
+  Typography,
   TextField,
   Button,
   CircularProgress,
   Alert,
   Link as MuiLink,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@mui/material";
-
+import { useTranslations } from "next-intl";
 import { useLoginUserMutation, useRegisterUserMutation } from "@/app/store/authApi";
+import { UserRegisterRequest, UserLoginRequest, ErrorResponse } from "@/app/types/auth";
+import { useDispatch } from "react-redux";
 import { setCredentials } from "@/app/store/authSlice";
-import {
-  UserLoginRequest,
-  UserRegisterRequest,
-  UserAuthResponse,
-  ErrorResponse,
-} from "@/app/types/auth";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 
 export default function AuthPage() {
   const t = useTranslations("AuthPage");
+  const dispatch = useDispatch();
   const router = useRouter();
   const locale = useLocale();
-  const dispatch = useDispatch();
 
-  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [isRegisterMode, setIsRegisterMode] = useState(false);
 
-  const [loginUsername, setLoginUsername] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("ROLE_USER");
 
-  const [registerUsername, setRegisterUsername] = useState("");
-  const [registerEmail, setRegisterEmail] = useState("");
-  const [registerPassword, setRegisterPassword] = useState("");
+  const [loginUser, { isLoading: isLoginLoading, error: loginError, isSuccess: isLoginSuccess }] = useLoginUserMutation();
+  const [registerUser, { isLoading: isRegisterLoading, error: registerError, isSuccess: isRegisterSuccess }] = useRegisterUserMutation();
 
-  const [
-    loginUser,
-    {
-      isLoading: isLoginLoading,
-      isSuccess: isLoginSuccess,
-      isError: isLoginError,
-      error: loginError,
-    },
-  ] = useLoginUserMutation();
-
-  const [
-    registerUser,
-    {
-      isLoading: isRegisterLoading,
-      isSuccess: isRegisterSuccess,
-      isError: isRegisterError,
-      error: registerError,
-    },
-  ] = useRegisterUserMutation();
-
-  const handleLoginSubmit = async (event: React.FormEvent) => {
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const mutationResult = loginUser({ username: loginUsername, password: loginPassword });
-      console.log("Resultado da Mutação (antes de unwrap):", mutationResult);
-
-      const result = await mutationResult.unwrap();
-      console.log("Login bem-sucedido:", result);
-
-      dispatch(setCredentials({ id: result.id, username: result.username, email: result.email }));
-
-      router.push(`/${locale}/gyms`);
+      const result = await loginUser({ username, password } as UserLoginRequest).unwrap();
+      dispatch(setCredentials({ id: result.id, username: result.username, email: result.email, roles: result.roles }));
+      router.push(`/${locale}/feed`);
     } catch (err: any) {
-      console.error("Falha no login (erro detalhado):", err);
+      console.error("Failed to log in:", err);
     }
   };
 
-  const handleRegisterSubmit = async (event: React.FormEvent) => {
+  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const result = await registerUser({
-        username: registerUsername,
-        email: registerEmail,
-        password: registerPassword,
-      }).unwrap();
-      console.log("Registro bem-sucedido:", result);
-
-      dispatch(setCredentials({ id: result.id, username: result.username, email: result.email }));
-
-      setIsLoginMode(true);
-      alert(t('registerSuccessMessage'));
-      router.push(`/${locale}/gyms`);
+      const result = await registerUser({ username, email, password, role } as UserRegisterRequest).unwrap();
+      setIsRegisterMode(false);
+      setUsername("");
+      setEmail("");
+      setPassword("");
+      setRole("ROLE_USER");
     } catch (err: any) {
-      console.error("Falha no registro:", err);
+      console.error("Failed to register:", err);
     }
   };
+
+  const currentError = isRegisterMode ? registerError : loginError;
 
   return (
-    <div className="flex items-center justify-center min-h-screen py-8">
-      <Box
-        className="flex flex-col items-center p-8 rounded-lg shadow-xl bg-white max-w-sm w-full">
-        <Typography variant="h4" component="h1" gutterBottom className="mb-4 text-center">
-          {isLoginMode ? t("loginTitle") : t("registerTitle")}
+    <Container component="main" maxWidth="sm" className="min-h-screen flex items-center justify-center pt-20 pb-10">
+      <Box className="flex flex-col items-center p-6 rounded-lg shadow-xl bg-white w-full">
+        <Typography variant="h5" component="h1" className="mb-4 text-green-600">
+          {isRegisterMode ? t("registerTitle") : t("loginTitle")}
         </Typography>
 
-        {isLoginSuccess && (
-          <Alert severity="success" className="w-full mb-4">
-            {t('loginSuccessMessage')}
-          </Alert>
+        {isLoginSuccess && !isRegisterMode && (
+          <Alert severity="success" className="w-full mb-4">{t("loginSuccessMessage")}</Alert>
         )}
-        {isLoginError && (
+        {isRegisterSuccess && !isRegisterMode && (
+          <Alert severity="success" className="w-full mb-4">{t("registerSuccessMessage")}</Alert>
+        )}
+        {currentError && (
           <Alert severity="error" className="w-full mb-4">
-            {(loginError as ErrorResponse)?.error || t("loginGenericErrorMessage")}
+            {(currentError as ErrorResponse)?.error || (isRegisterMode ? t("registerGenericErrorMessage") : t("loginGenericErrorMessage"))}
           </Alert>
         )}
 
-        {isRegisterSuccess && (
-          <Alert severity="success" className="w-full mb-4">
-            {t('registerSuccessMessage')}
-          </Alert>
-        )}
-        {isRegisterError && (
-          <Alert severity="error" className="w-full mb-4">
-            {(registerError as ErrorResponse)?.error || t("registerGenericErrorMessage")}
-          </Alert>
-        )}
-
-        {isLoginMode ? (
-          <Box component="form" onSubmit={handleLoginSubmit} className="mt-4 w-full">
+        <Box component="form" onSubmit={isRegisterMode ? handleRegister : handleLogin} className="w-full space-y-4">
+          <TextField
+            fullWidth
+            label={t("usernameLabel")}
+            variant="outlined"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          {isRegisterMode && (
             <TextField
-              margin="normal"
-              required
               fullWidth
-              id="usernameLogin"
-              label={t("usernameLabel")}
-              name="username"
-              autoComplete="username"
-              autoFocus
-              value={loginUsername}
-              onChange={(e) => setLoginUsername(e.target.value)}
-              className="mb-4"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label={t("passwordLabel")}
-              type="password"
-              id="passwordLogin"
-              autoComplete="current-password"
-              value={loginPassword}
-              onChange={(e) => setLoginPassword(e.target.value)}
-              className="mb-4"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              className="mt-6 mb-4 bg-green-600 hover:bg-green-700 text-white"
-              disabled={isLoginLoading}
-            >
-              {isLoginLoading ? <CircularProgress size={24} color="inherit" /> : t("loginButton")}
-            </Button>
-            <MuiLink
-              component="button"
-              variant="body2"
-              onClick={() => setIsLoginMode(false)}
-              className="w-full text-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
-            >
-              {t("dontHaveAccount")}
-            </MuiLink>
-          </Box>
-        ) : (
-          <Box component="form" onSubmit={handleRegisterSubmit} className="mt-4 w-full">
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="usernameRegister"
-              label={t("usernameLabel")}
-              name="username"
-              autoComplete="username"
-              autoFocus
-              value={registerUsername}
-              onChange={(e) => setRegisterUsername(e.target.value)}
-              className="mb-4"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="emailRegister"
               label={t("emailLabel")}
-              name="email"
-              autoComplete="email"
               type="email"
-              value={registerEmail}
-              onChange={(e) => setRegisterEmail(e.target.value)}
-              className="mb-4"
-            />
-            <TextField
-              margin="normal"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              fullWidth
-              name="password"
-              label={t("passwordLabel")}
-              type="password"
-              id="passwordRegister"
-              autoComplete="new-password"
-              value={registerPassword}
-              onChange={(e) => setRegisterPassword(e.target.value)}
-              className="mb-4"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              className="mt-6 mb-4 bg-green-600 hover:bg-green-700 text-white"
-              disabled={isRegisterLoading}
-            >
-              {isRegisterLoading ? <CircularProgress size={24} color="inherit" /> : t("registerButton")}
-            </Button>
-            <MuiLink
-              component="button"
-              variant="body2"
-              onClick={() => setIsLoginMode(true)}
-              className="w-full text-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
-            >
-              {t("alreadyHaveAccount")}
-            </MuiLink>
-          </Box>
-        )}
+          )}
+          <TextField
+            fullWidth
+            label={t("passwordLabel")}
+            type="password"
+            variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {isRegisterMode && (
+            <FormControl fullWidth variant="outlined">
+              <InputLabel id="role-label">{t("selectRole")}</InputLabel>
+              <Select
+                labelId="role-label"
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value as string)}
+                label={t("selectRole")}
+              >
+                <MenuItem value="ROLE_USER">{t("roleUser")}</MenuItem>
+                <MenuItem value="ROLE_GYM_OWNER">{t("roleGymOwner")}</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2, mb: 2 }}
+            disabled={isLoginLoading || isRegisterLoading}
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            {isLoginLoading || isRegisterLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : isRegisterMode ? (
+              t("registerButton")
+            ) : (
+              t("loginButton")
+            )}
+          </Button>
+        </Box>
+        <MuiLink
+          component="button"
+          variant="body2"
+          onClick={() => setIsRegisterMode(!isRegisterMode)}
+          className="text-green-600 hover:underline"
+        >
+          {isRegisterMode ? t("alreadyHaveAccount") : t("dontHaveAccount")}
+        </MuiLink>
       </Box>
-    </div>
+    </Container>
   );
 }

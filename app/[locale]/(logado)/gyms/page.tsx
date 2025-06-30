@@ -37,7 +37,7 @@ export default function Gyms() {
   if (error) return <p>Erro ao buscar academias.</p>;
 
   return (
-      <div className="w-full max-w-7xl mx-auto p-4 sm:p-8">
+      <div className="w-full max-w-7xl mx-auto p-4 sm:p-8 mt-16"> {/* Adicionado mt-16 aqui */}
         <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
           <h1 className="text-4xl font-bold">Academias em destaque</h1>
 

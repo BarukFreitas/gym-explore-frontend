@@ -1,95 +1,262 @@
 "use client";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import { FaBars, FaTimes } from "react-icons/fa";
+
+import React, { useState } from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store/store";
 import { clearCredentials } from "@/app/store/authSlice";
-import { useRouter } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
-import Link from "next/link";
 
-export default function NavBarLogado() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+// Interface para as props do NavBarLogado AGORA EXPORTADA
+export interface NavBarLogadoProps {
+  onLogout: () => void;
+  username: string | null;
+}
+
+function NavBarLogado({ onLogout, username }: NavBarLogadoProps) {
+  const t = useTranslations("Navbar");
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const pathname = usePathname();
   const router = useRouter();
   const locale = useLocale();
-  const t = useTranslations('Navbar');
-
-  // >>> CORREÇÃO: Obter os dados diretamente do estado, como definido no seu slice <<<
-  const { username, email } = useSelector((state: RootState) => state.auth);
-
   const dispatch = useDispatch();
 
+  const userRoles = useSelector((state: RootState) => state.auth.roles);
+  // Adicione uma verificação de segurança para userRoles ser sempre um array
+  const showCreateGymButton = (userRoles || []).includes("ROLE_GYM_OWNER") || (userRoles || []).includes("ROLE_ADMIN");
+
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   const handleLogoutClick = () => {
-    dispatch(clearCredentials()); // Despacha a ação correta
-    setIsModalOpen(false);
-    router.push(`/${locale}/`);
+    onLogout();
+    handleCloseUserMenu();
   };
 
-  const handleToggleModal = () => {
-    setIsModalOpen((prev) => !prev);
-  };
-
-  const loggedNavLinks = [
-    { label: t("feed"), href: `/${locale}/feed` },
-    { label: t("gyms"), href: `/${locale}/gyms` },
+  const pages = [
+    { name: t("home"), path: "" },
+    { name: t("services"), path: "servicos" },
+    { name: t("about"), path: "sobre" },
+    { name: t("contact"), path: "contato" },
+    { name: t("feed"), path: "feed" },
+    { name: t("gyms"), path: "gyms" },
   ];
+  const settings = [{ name: t("logoutButton"), action: handleLogoutClick }];
 
   return (
-      <>
-        <nav className="bg-gray-900 text-white p-4 flex justify-between items-center shadow">
-          {/* ... (código da barra de navegação que já estava correto) ... */}
-          <div className="flex items-center">
-            <Image src="/logo.png" alt="Logo" width={50} height={50} className="cursor-pointer" />
-            <span className="ml-2 font-bold text-lg">Gym Explore</span>
-          </div>
-          <div className="hidden md:flex space-x-6 lg:space-x-8">
-            {loggedNavLinks.map((link) => (
-                <Link key={link.label} href={link.href} className="text-white hover:text-green-500 font-semibold hover:scale-105 transition-transform duration-300">
-                  {link.label}
-                </Link>
-            ))}
-          </div>
-          <button onClick={handleToggleModal} className="text-2xl text-white focus:outline-none">
-            {isModalOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </nav>
+    <AppBar position="fixed" sx={{ backgroundColor: "rgb(28, 28, 28)" }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href={`/${locale}`}
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            {t("logo")}
+          </Typography>
 
-        <AnimatePresence>
-          {isModalOpen && (
-              <motion.div
-                  initial={{ opacity: 0, x: "100%" }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: "100%" }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="fixed top-0 right-0 h-full w-64 bg-gray-900 text-white shadow-lg z-50 flex flex-col p-4"
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Link href={`/${locale}/${page.path}`} passHref>
+                    <Typography
+                      textAlign="center"
+                      sx={{
+                        color:
+                          pathname === `/${locale}/${page.path}`
+                            ? "primary.main"
+                            : "inherit",
+                        textDecoration: "none",
+                      }}
+                    >
+                      {page.name}
+                    </Typography>
+                  </Link>
+                </MenuItem>
+              ))}
+              {showCreateGymButton && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link href={`/${locale}/gyms/create`} passHref>
+                    <Typography
+                      textAlign="center"
+                      sx={{
+                        color:
+                          pathname === `/${locale}/gyms/create`
+                            ? "primary.main"
+                            : "inherit",
+                        textDecoration: "none",
+                      }}
+                    >
+                      {t("addGym")}
+                    </Typography>
+                  </Link>
+                </MenuItem>
+              )}
+            </Menu>
+          </Box>
+          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href={`/${locale}`}
+            sx={{
+              mr: 2,
+              display: { xs: "flex", md: "none" },
+              flexGrow: 1,
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            {t("logo")}
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {pages.map((page) => (
+              <Button
+                key={page.name}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
               >
-                <button onClick={handleToggleModal} className="absolute top-4 right-4 text-white text-2xl focus:outline-none" aria-label="Fechar modal">
-                  <FaTimes />
-                </button>
+                <Link href={`/${locale}/${page.path}`} passHref>
+                  <Typography
+                    textAlign="center"
+                    sx={{
+                      color:
+                        pathname === `/${locale}/${page.path}`
+                          ? "green"
+                          : "inherit",
+                      textDecoration: "none",
+                    }}
+                  >
+                    {page.name}
+                  </Typography>
+                </Link>
+              </Button>
+            ))}
+            {showCreateGymButton && (
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                <Link href={`/${locale}/gyms/create`} passHref>
+                  <Typography
+                    textAlign="center"
+                    sx={{
+                      color:
+                        pathname === `/${locale}/gyms/create`
+                          ? "green"
+                          : "inherit",
+                      textDecoration: "none",
+                    }}
+                  >
+                    {t("addGym")}
+                  </Typography>
+                </Link>
+              </Button>
+            )}
+          </Box>
 
-                {/* >>> CORREÇÃO: Usa as variáveis obtidas diretamente do useSelector <<< */}
-                <div className="flex flex-col items-center mb-4 mt-8">
-                  <h2 className="mt-2 font-bold text-lg">{username || "Utilizador"}</h2>
-                </div>
-                <p className="text-center text-gray-400 text-sm mb-6">{email}</p>
-
-                <div className="flex flex-col space-y-2">
-                  {loggedNavLinks.map((link) => (
-                      <Link key={link.label} href={link.href} onClick={handleToggleModal} className="block text-white hover:bg-green-700 hover:text-white px-4 py-2 rounded-md transition-colors duration-200">
-                        {link.label}
-                      </Link>
-                  ))}
-                  <div className="mt-4 pt-4 border-t border-gray-700">
-                    <button className="bg-red-600 text-white py-2 rounded hover:bg-red-700 transition w-full" onClick={handleLogoutClick}>
-                      {t("logoutButton")}
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-          )}
-        </AnimatePresence>
-      </>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <AdbIcon sx={{ color: "white" }} />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting.name} onClick={setting.action}>
+                  <Typography textAlign="center">{setting.name}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }
+export default NavBarLogado;

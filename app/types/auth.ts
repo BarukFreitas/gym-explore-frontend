@@ -2,6 +2,7 @@ export interface UserRegisterRequest {
   username: string;
   email: string;
   password: string;
+  role: string;
 }
 
 export interface UserLoginRequest {
@@ -14,6 +15,7 @@ export interface UserAuthResponse {
   username: string;
   email: string;
   message: string;
+  roles: string[];
 }
 
 export interface ErrorResponse {

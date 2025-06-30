@@ -7,7 +7,8 @@
     "joinNow": "Únete Ahora",
     "logoutButton": "Cerrar Sesión",
     "feed": "Feed",
-    "gyms": "Gimnasios"
+    "gyms": "Gimnasios",
+    "addGym": "Añadir Gimnasio"
   },
   "HeroSection": {
     "title": "Eleva tu entrenamiento",
@@ -119,19 +120,22 @@
     "loginSuccessMessage": "¡Inicio de sesión exitoso! Redireccionando...",
     "registerSuccessMessage": "¡Registro exitoso! Por favor, inicia sesión para continuar.",
     "loginGenericErrorMessage": "Error al intentar iniciar sesión. Por favor, verifica tus credenciales.",
-    "registerGenericErrorMessage": "Error al intentar registrar. Por favor, verifica los datos."
+    "registerGenericErrorMessage": "Error al intentar registrar. Por favor, verifica los datos.",
+    "selectRole": "Selecciona el tipo de usuario",
+    "roleUser": "Usuario Estándar",
+    "roleGymOwner": "Propietario de Gimnasio"
   },
-"FeedPage": {
-  "feedTitle": "Feed de Actividad",
-  "newPostPlaceholder": "Comparte tu rutina de entrenamiento, consejos o logros aquí...",
-  "imageUrlPlaceholder": "URL de la Imagen (opcional)",
-  "postButton": "Publicar",
-  "recentPostsTitle": "Publicaciones Recientes",
-  "noPostsYet": "No hay publicaciones para mostrar. ¡Sé el primero en compartir!",
-  "emptyPostError": "Tu publicación no puede estar vacía.",
-  "notLoggedInToPostError": "Debes iniciar sesión para crear una publicación.",
-  "genericPostError": "Ocurrió un error al intentar publicar. Por favor, inténtalo de nuevo.",
-  "postSuccessMessage": "¡Publicación exitosa!",
-  "errorLoadingPosts": "Error al cargar las publicaciones. Por favor, intenta actualizar la página."
-}
+  "FeedPage": {
+    "feedTitle": "Feed de Actividad",
+    "newPostPlaceholder": "Comparte tu rutina de entrenamiento, consejos o logros aquí...",
+    "imageUrlPlaceholder": "URL de la Imagen (opcional)",
+    "postButton": "Publicar",
+    "recentPostsTitle": "Publicaciones Recientes",
+    "noPostsYet": "No hay publicaciones para mostrar. ¡Sé el primero en compartir!",
+    "emptyPostError": "Tu publicación no puede estar vacía.",
+    "notLoggedInToPostError": "Debes iniciar sesión para crear una publicación.",
+    "genericPostError": "Ocurrió un error al intentar publicar. Por favor, inténtalo de nuevo.",
+    "postSuccessMessage": "¡Publicación exitosa!",
+    "errorLoadingPosts": "Error al cargar las publicaciones. Por favor, intenta actualizar la página."
+  }
 }
