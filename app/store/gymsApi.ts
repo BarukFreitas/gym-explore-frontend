@@ -17,6 +17,13 @@ export interface Review {
     userName:string;
 }
 
+export interface ReviewCreatePayload {
+    gymId: number;
+    userId: number;
+    comment: string;
+    rating: number;
+}
+
 export type GymCreatePayload = Omit<Gym, 'id'>;
 
 export const gymsApi = createApi({
@@ -38,7 +45,7 @@ export const gymsApi = createApi({
         }),
 
         getReviewsByGymId: builder.query<Review[], number>({
-            query: (gymId) => `reviews/gym/${gymId}`, // Diz como construir a URL
+            query: (gymId) => `reviews/gym/${gymId}`,
             providesTags: (result, error, gymId) => [{ type: 'Review', id: gymId }],
         }),
 
@@ -50,11 +57,21 @@ export const gymsApi = createApi({
             }),
             invalidatesTags: [{ type: 'Gym', id: 'LIST' }],
         }),
+
+        addReview: builder.mutation<Review, ReviewCreatePayload>({
+            query: ({ gymId, userId, ...body }) => ({
+                url: `reviews/gym/${gymId}/user/${userId}`,
+                method: 'POST',
+                body: { comment: body.comment, rating: body.rating },
+            }),
+            invalidatesTags: (result, error, { gymId }) => [{ type: 'Review', id: gymId }],
+        }),
     }),
 });
 
 export const {
     useGetAllGymsQuery,
     useGetReviewsByGymIdQuery,
-    useAddGymMutation
+    useAddGymMutation,
+    useAddReviewMutation
 } = gymsApi;
