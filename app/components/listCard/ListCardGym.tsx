@@ -2,32 +2,35 @@
 import React from "react";
 import GymCard from "../card/CardGym";
 
-// Tipo do produto (simplificado, ajuste conforme necessário)
-interface Product {
+// 1. Defina a interface para uma única Academia.
+//    Ela deve corresponder exatamente ao que sua API envia.
+interface Gym {
   id: number;
-  title: string;
-  price: number;
-  images: string[];
-  reviews: {
-    rating: number;
-    comment: string;
-    reviewerName: string;
-  }[];
+  name: string;
+  address: string;
+  phone: string;
+  imageUrl: string;
 }
 
+// 2. Defina a interface para as props que este componente recebe.
+//    Ele agora espera um array de 'Gym' chamado 'gyms'.
 interface ListCardProps {
-  products: Product[];
+  gyms: Gym[];
 }
 
-export default function ListCard ({ products }: ListCardProps) {
+// 3. Receba 'gyms' como propriedade, em vez de 'products'.
+export default function ListCard({ gyms }: ListCardProps) {
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
-      {products.map((product) => (
-        <GymCard
-          key={product.id}
-          product={product}
-        />
-      ))}
-    </div>
+      <div className="flex flex-wrap gap-6 justify-center">
+        {/* 4. Faça o loop sobre a lista 'gyms' */}
+        {gyms.map((gym) => (
+            // 5. Passe cada objeto 'gym' para o componente GymCard.
+            //    A propriedade agora se chama 'gym'.
+            <GymCard
+                key={gym.id}
+                gym={gym}
+            />
+        ))}
+      </div>
   );
 }
