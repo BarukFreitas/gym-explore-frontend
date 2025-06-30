@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { gymsApi } from "./gymsApi";
 import { productsApi } from "./productApi";
 import { authApi } from "./authApi";
 import { postApi } from "./postApi";
@@ -28,6 +29,7 @@ const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 
 export const store = configureStore({
   reducer: {
+    [gymsApi.reducerPath]: gymsApi.reducer,
     [productsApi.reducerPath]: productsApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
@@ -35,11 +37,11 @@ export const store = configureStore({
     filter: filterReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }).concat(productsApi.middleware, authApi.middleware, postApi.middleware),
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }).concat(gymsApi.middleware, productsApi.middleware, authApi.middleware, postApi.middleware),
 });
 
 export const persistor = persistStore(store);

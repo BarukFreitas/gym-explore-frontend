@@ -6,22 +6,9 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store/store";
 import Loading from "@/app/components/loading/Loading";
-import { useGetAllProductsQuery } from "@/app/store/productApi";
+import { useGetAllGymsQuery } from "@/app/store/gymsApi";
 import { useLocale } from "next-intl";
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  images: string[];
-  reviews: {
-    rating: number;
-    comment: string;
-    reviewerName: string;
-  }[];
-}
-
-const PAGE_SIZE = 10;
+import Link from 'next/link';
 
 export default function Gyms() {
   const router = useRouter();
@@ -29,65 +16,40 @@ export default function Gyms() {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
-  const [page, setPage] = useState(0);
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-
-  const { data: products, isLoading, error } = useGetAllProductsQuery({
-    limit: PAGE_SIZE,
-    skip: page * PAGE_SIZE,
-  });
+  const { data: gyms, isLoading, error } = useGetAllGymsQuery();
 
   useEffect(() => {
     if (checkingAuth) {
-        const timer = setTimeout(() => {
-            if (!isLoggedIn) {
-                router.push(`/${locale}/`);
-            } else {
-                setCheckingAuth(false);
-            }
-        }, 500);
-        return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        if (!isLoggedIn) {
+          router.push(`/${locale}/`);
+        } else {
+          setCheckingAuth(false);
+        }
+      }, 500);
+      return () => clearTimeout(timer);
     }
   }, [isLoggedIn, router, checkingAuth, locale]);
 
-  useEffect(() => {
-    if (products && products.length > 0) {
-      setAllProducts((prev) => {
-        const ids = new Set(prev.map((p) => p.id));
-        const novos = products.filter((p) => !ids.has(p.id));
-        return [...prev, ...novos];
-      });
-    }
-  }, [products]);
-
-  useEffect(() => {
-    if (page === 0 && products && products.length > 0) {
-      setAllProducts(products);
-    } else if (page === 0) {
-      setAllProducts([]);
-    }
-  }, [page, products]);
-
   if (checkingAuth) return <Loading />;
   if (!isLoggedIn) return <Loading />;
-
-  if (isLoading && allProducts.length === 0) return <Loading />;
+  if (isLoading) return <Loading />;
   if (error) return <p>Erro ao buscar academias.</p>;
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <h1 className="text-4xl font-bold">Academias em destaque</h1>
-      <ListCard products={allProducts} />
+      <div className="w-full max-w-7xl mx-auto p-4 sm:p-8">
+        <div className="flex flex-wrap justify-between items-center gap-4 mb-8">
+          <h1 className="text-4xl font-bold">Academias em destaque</h1>
 
-      <div className="flex gap-4 mt-8">
-        <button
-          className="px-4 py-2 bg-white text-black rounded disabled:opacity-50"
-          onClick={() => setPage((p) => p + 1)}
-          disabled={!products || products.length < PAGE_SIZE}
-        >
-          Carregar mais
-        </button>
+          <Link
+              href={`/${locale}/gyms/create`}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200"
+          >
+            Adicionar Nova Academia
+          </Link>
+        </div>
+
+        {gyms && <ListCard gyms={gyms} />}
       </div>
-    </div>
   );
 }
