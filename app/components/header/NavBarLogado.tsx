@@ -12,7 +12,10 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import siteLogo from "@/public/logo.png";
+
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,43 +24,43 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store/store";
 import { clearCredentials } from "@/app/store/authSlice";
 
-// Interface para as props do NavBarLogado AGORA EXPORTADA
 export interface NavBarLogadoProps {
   onLogout: () => void;
   username: string | null;
 }
 
 function NavBarLogado({ onLogout, username }: NavBarLogadoProps) {
-  const t = useTranslations("Navbar");
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [openUserDrawer, setOpenUserDrawer] = useState(false);
+
+  const t = useTranslations("Navbar");
   const pathname = usePathname();
   const router = useRouter();
   const locale = useLocale();
   const dispatch = useDispatch();
 
   const userRoles = useSelector((state: RootState) => state.auth.roles);
-  // Adicione uma verificação de segurança para userRoles ser sempre um array
+  const userEmail = useSelector((state: RootState) => state.auth.email);
+
   const showCreateGymButton = (userRoles || []).includes("ROLE_GYM_OWNER") || (userRoles || []).includes("ROLE_ADMIN");
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleOpenUserDrawer = () => {
+    setOpenUserDrawer(true);
+  };
+  const handleCloseUserDrawer = () => {
+    setOpenUserDrawer(false);
   };
 
   const handleLogoutClick = () => {
     onLogout();
-    handleCloseUserMenu();
+    handleCloseUserDrawer();
   };
 
   const pages = [
@@ -68,13 +71,17 @@ function NavBarLogado({ onLogout, username }: NavBarLogadoProps) {
     { name: t("feed"), path: "feed" },
     { name: t("gyms"), path: "gyms" },
   ];
-  const settings = [{ name: t("logoutButton"), action: handleLogoutClick }];
 
   return (
     <AppBar position="fixed" sx={{ backgroundColor: "rgb(28, 28, 28)" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <Box
+            component="img"
+            src={siteLogo.src}
+            alt="Gym Explore Logo"
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1, height: 40 }}
+          />
           <Typography
             variant="h6"
             noWrap
@@ -160,7 +167,12 @@ function NavBarLogado({ onLogout, username }: NavBarLogadoProps) {
               )}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <Box
+            component="img"
+            src={siteLogo.src}
+            alt="Gym Explore Logo"
+            sx={{ display: { xs: "flex", md: "none" }, mr: 1, height: 30 }}
+          />
           <Typography
             variant="h5"
             noWrap
@@ -213,7 +225,7 @@ function NavBarLogado({ onLogout, username }: NavBarLogadoProps) {
                     sx={{
                       color:
                         pathname === `/${locale}/gyms/create`
-                          ? "green"
+                          ? "primary.main"
                           : "inherit",
                       textDecoration: "none",
                     }}
@@ -227,35 +239,46 @@ function NavBarLogado({ onLogout, username }: NavBarLogadoProps) {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <AdbIcon sx={{ color: "white" }} />
+              <IconButton onClick={handleOpenUserDrawer} sx={{ p: 0 }}>
+                <MenuIcon sx={{ color: "white" }} />
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting.name} onClick={setting.action}>
-                  <Typography textAlign="center">{setting.name}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
         </Toolbar>
       </Container>
+
+      <Drawer
+        anchor="right"
+        open={openUserDrawer}
+        onClose={handleCloseUserDrawer}
+        PaperProps={{
+          sx: {
+            backgroundColor: "rgb(28, 28, 28)",
+            color: "white",
+            width: 250,
+          },
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {username && (
+            <Typography variant="h6" sx={{ mb: 0.5, color: 'white' }}>
+              {username}
+            </Typography>
+          )}
+          {userEmail && (
+            <Typography variant="body2" color="white" sx={{ mb: 2 }}>
+              {userEmail}
+            </Typography>
+          )}
+        </Box>
+        <Divider sx={{ my: 0.5, bgcolor: 'rgba(255, 255, 255, 0.12)' }} />
+        <MenuItem onClick={handleLogoutClick} sx={{ justifyContent: 'center' }}>
+          <Typography textAlign="center" sx={{ color: 'white' }}>
+            {t("logoutButton")}
+          </Typography>
+        </MenuItem>
+      </Drawer>
     </AppBar>
   );
 }
