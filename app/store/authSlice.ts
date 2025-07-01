@@ -5,6 +5,7 @@ interface UserState {
   username: string | null;
   email: string | null;
   isLoggedIn: boolean;
+  roles: string[];
 }
 
 const initialState: UserState = {
@@ -12,22 +13,25 @@ const initialState: UserState = {
   username: null,
   email: null,
   isLoggedIn: false,
+  roles: [],
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<{ id: number; username: string; email: string }>) => {
+    setCredentials: (state, action: PayloadAction<{ id: number; username: string; email: string; roles: string[] }>) => {
       state.id = action.payload.id;
       state.username = action.payload.username;
       state.email = action.payload.email;
+      state.roles = action.payload.roles;
       state.isLoggedIn = true;
     },
     clearCredentials: (state) => {
       state.id = null;
       state.username = null;
       state.email = null;
+      state.roles = [];
       state.isLoggedIn = false;
     },
   },

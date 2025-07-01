@@ -1,4 +1,3 @@
-// app/components/header/NavBar.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -12,18 +11,18 @@ import { useLocale } from 'next-intl';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import gymExploreLogo from '@/public/logo.png';
 import ButtonLogin from '../button/ButtonLogin';
-import NavBarLogado from './NavBarLogado';
+import NavBarLogado from './NavBarLogado'; // Importa NavBarLogado, com as props tipadas corretamente agora
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "@/app/store/store";
 import { clearCredentials } from "@/app/store/authSlice";
 
 const Navbar = () => {
-  const t = useTranslations('Navbar');
+  const t = useTranslations("Navbar");
   const locale = useLocale();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(0);
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
@@ -49,7 +48,7 @@ const Navbar = () => {
       }
       setLastScrollY(currentScrollY);
 
-      setScrolled(currentScrollY > 10);
+      setScrolled(currentScrollY > 10 ? 1 : 0);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -60,13 +59,11 @@ const Navbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  // REMOVER O LINK 'FEED' DAQUI
   const navLinks = [
     { label: t("home"), href: `/${locale}/` },
     { label: t("about"), href: `/${locale}/sobre` },
     { label: t("services"), href: `/${locale}/servicos` },
     { label: t("contact"), href: `/${locale}/contato` },
-    // { label: t("feed"), href: `/${locale}/feed` }, // <-- REMOVA ESTA LINHA
   ];
 
   const navbarClasses = `

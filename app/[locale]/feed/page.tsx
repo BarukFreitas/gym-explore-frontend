@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Container, Typography, Box, TextField, Button, CircularProgress, Alert, Paper } from "@mui/material";
+import { Container, Box, Typography, TextField, Button, CircularProgress, Alert } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useSelector } from "react-redux";
@@ -14,10 +13,6 @@ import { useCreatePostMutation, useGetAllPostsQuery } from "@/app/store/postApi"
 import { PostCreateRequest, PostResponse } from "@/app/types/post";
 import { ErrorResponse } from "@/app/types/auth";
 
-import PostCard from '@/app/components/feed/PostCard';
-
-import feedBgImage from "@/public/feed-academia.jpg";
-
 export default function FeedPage() {
   const t = useTranslations("FeedPage");
   const router = useRouter();
@@ -26,13 +21,6 @@ export default function FeedPage() {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const currentUserId = useSelector((state: RootState) => state.auth.id);
   const [checkingAuth, setCheckingAuth] = useState(true);
-
-  const [newPostContent, setNewPostContent] = useState("");
-  const [newPostImageUrl, setNewPostImageUrl] = useState("");
-  const [postErrorMessage, setPostErrorMessage] = useState<string | null>(null);
-
-  const [createPost, { isLoading: isCreatingPost, isError: createPostError, error: createPostErrorData, isSuccess: createPostSuccess }] = useCreatePostMutation();
-  const { data: posts, isLoading: isPostsLoading, error: postsError, refetch: refetchPosts } = useGetAllPostsQuery();
 
   useEffect(() => {
     if (checkingAuth) {
@@ -46,6 +34,13 @@ export default function FeedPage() {
         return () => clearTimeout(timer);
     }
   }, [isLoggedIn, router, checkingAuth, locale]);
+
+  const [createPost, { isLoading: isCreatingPost, isError: createPostError, error: createPostErrorData, isSuccess: createPostSuccess }] = useCreatePostMutation();
+  const { data: posts, isLoading: isPostsLoading, error: postsError, refetch: refetchPosts } = useGetAllPostsQuery();
+
+  const [newPostContent, setNewPostContent] = useState("");
+  const [newPostImageUrl, setNewPostImageUrl] = useState("");
+  const [postErrorMessage, setPostErrorMessage] = useState<string | null>(null);
 
   const handlePostSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -62,16 +57,16 @@ export default function FeedPage() {
         return;
     }
 
-    try {
-      const postData: PostCreateRequest = {
+    const postData: PostCreateRequest = {
         content: newPostContent,
-        imageUrl: newPostImageUrl.trim() ? newPostImageUrl.trim() : undefined,
-      };
+        imageUrl: newPostImageUrl.trim() ? newPostImageUrl : undefined,
+    };
 
-      await createPost({ userId: currentUserId, data: postData }).unwrap();
-      setNewPostContent("");
-      setNewPostImageUrl("");
-      refetchPosts();
+    try {
+        await createPost({ userId: currentUserId, data: postData }).unwrap();
+        setNewPostContent("");
+        setNewPostImageUrl("");
+        refetchPosts();
     } catch (err: any) {
         console.error("Falha ao criar postagem:", err);
         setPostErrorMessage((err as ErrorResponse)?.error || t("genericPostError"));
@@ -82,95 +77,87 @@ export default function FeedPage() {
   if (!isLoggedIn) return <Loading />;
 
   return (
-    <Box className="relative w-full min-h-screen flex flex-col items-center py-8">
-      <div className="absolute inset-0 z-0">
-        <Image
-          src={feedBgImage}
-          alt="Pessoas em uma academia"
-          layout="fill"
-          objectFit="cover"
-          className="opacity-70"
-          priority
-        />
-        <div className="absolute inset-0 bg-black opacity-70"></div>
-      </div>
+    <Container maxWidth="md" className="py-8 mt-16 min-h-screen">
+      <Box className="flex flex-col items-center p-6 rounded-lg shadow-xl bg-white mb-8">
+        <Typography variant="h4" component="h1" className="mb-6 text-green-600">
+          {t("feedTitle")}
+        </Typography>
 
-      <Container maxWidth="md" className="relative z-10 py-8 mt-16">
-        <Paper elevation={3} className="p-6 rounded-lg shadow-2xl bg-white bg-opacity-80 backdrop-blur-sm mb-8">
-          <Typography variant="h4" component="h1" className="mb-6 text-green-700 font-bold text-center">
-            {t("feedTitle")}
-          </Typography>
-
-          {postErrorMessage && (
-              <Alert severity="error" className="w-full mb-4">
-                  {postErrorMessage}
-              </Alert>
-          )}
-          {createPostSuccess && (
-              <Alert severity="success" className="w-full mb-4">
-                  {t("postSuccessMessage")}
-              </Alert>
-          )}
-
-          <Box component="form" onSubmit={handlePostSubmit} className="w-full">
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              variant="outlined"
-              label={t("newPostPlaceholder")}
-              value={newPostContent}
-              onChange={(e) => setNewPostContent(e.target.value)}
-              className="mb-4"
-              sx={{ '.MuiOutlinedInput-root': { backgroundColor: 'rgba(255,255,255,0.8)' } }}
-            />
-            <TextField
-              fullWidth
-              variant="outlined"
-              label={t("imageUrlPlaceholder")}
-              value={newPostImageUrl}
-              onChange={(e) => setNewPostImageUrl(e.target.value)}
-              className="mb-4"
-              sx={{ '.MuiOutlinedInput-root': { backgroundColor: 'rgba(255,255,255,0.8)' } }}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              disabled={isCreatingPost || !newPostContent.trim()}
-              className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 transition-all duration-300 ease-in-out"
-            >
-              {isCreatingPost ? <CircularProgress size={24} color="inherit" /> : t("postButton")}
-            </Button>
-          </Box>
-        </Paper>
-
-        <Box className="flex flex-col space-y-4">
-          <Typography variant="h5" component="h2" className="mb-4 text-white font-bold text-center drop-shadow">
-            {t("recentPostsTitle")}
-          </Typography>
-
-          {isPostsLoading && <Loading />}
-          {postsError && (
+        {postErrorMessage && (
             <Alert severity="error" className="w-full mb-4">
-              {(postsError as ErrorResponse)?.error || t("errorLoadingPosts")}
+                {postErrorMessage}
             </Alert>
-          )}
+        )}
+        {createPostSuccess && (
+            <Alert severity="success" className="w-full mb-4">
+                {t("postSuccessMessage")}
+            </Alert>
+        )}
 
-          {posts && posts.length > 0 ? (
-            posts.map(post => (
-              <PostCard key={post.id} post={post} />
-            ))
-          ) : (
-            !isPostsLoading && !postsError && (
-              <Typography className="text-white italic text-center drop-shadow">
-                  {t("noPostsYet")}
-              </Typography>
-            )
-          )}
+        <Box component="form" onSubmit={handlePostSubmit} className="w-full mb-8">
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            variant="outlined"
+            label={t("newPostPlaceholder")}
+            value={newPostContent}
+            onChange={(e) => setNewPostContent(e.target.value)}
+            className="mb-4"
+          />
+          <TextField
+            fullWidth
+            variant="outlined"
+            label={t("imageUrlPlaceholder")}
+            value={newPostImageUrl}
+            onChange={(e) => setNewPostImageUrl(e.target.value)}
+            className="mb-4"
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={isCreatingPost || !newPostContent.trim()}
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            {isCreatingPost ? <CircularProgress size={24} color="inherit" /> : t("postButton")}
+          </Button>
         </Box>
-      </Container>
-    </Box>
+
+      </Box>
+
+      <Box className="flex flex-col space-y-4">
+        <Typography variant="h5" component="h2" className="mb-4 text-green-600">
+          {t("recentPostsTitle")}
+        </Typography>
+
+        {isPostsLoading && <Loading />}
+        {postsError && <Alert severity="error" className="w-full mb-4">{(postsError as ErrorResponse)?.error || t("errorLoadingPosts")}</Alert>}
+
+        {posts && posts.length > 0 ? (
+          posts.map(post => (
+            <div key={post.id} className="bg-white p-4 rounded-lg shadow border border-gray-200">
+              <Typography variant="subtitle1" className="font-bold text-gray-800">{post.username}</Typography>
+              <Typography variant="body2" className="text-gray-700 mt-1">{post.content}</Typography>
+              {post.imageUrl && (
+                <Box sx={{ mt: 2 }}>
+                  <img src={post.imageUrl} alt="Post image" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }} />
+                </Box>
+              )}
+              <Typography variant="caption" className="text-gray-500 mt-2 block">
+                {new Date(post.timestamp).toLocaleString(locale)}
+              </Typography>
+            </div>
+          ))
+        ) : (
+          !isPostsLoading && !postsError && (
+            <Typography className="text-gray-600 italic">
+                {t("noPostsYet")}
+            </Typography>
+          )
+        )}
+      </Box>
+    </Container>
   );
 }
