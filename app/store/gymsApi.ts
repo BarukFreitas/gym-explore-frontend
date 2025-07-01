@@ -24,6 +24,13 @@ export interface ReviewCreatePayload {
     rating: number;
 }
 
+export interface ContactPayload {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+}
+
 export type GymCreatePayload = Omit<Gym, 'id'>;
 
 export type GymUpdatePayload = {
@@ -81,7 +88,6 @@ export const gymsApi = createApi({
             invalidatesTags: (result, error, { id }) => [{ type: 'Gym', id: 'LIST' }, { type: 'Gym', id }],
         }),
 
-        // MUTATION PARA EXCLUIR UMA ACADEMIA
         deleteGym: builder.mutation<{ success: boolean; id: number }, number>({
             query(id) {
                 return {
@@ -90,6 +96,14 @@ export const gymsApi = createApi({
                 }
             },
             invalidatesTags: (result, error, id) => [{ type: 'Gym', id: 'LIST' }],
+        }),
+
+        sendContactForm: builder.mutation<void, ContactPayload>({
+            query: (contactData) => ({
+                url: 'contact',
+                method: 'POST',
+                body: contactData,
+            }),
         }),
     }),
 });
@@ -100,5 +114,6 @@ export const {
     useAddGymMutation,
     useAddReviewMutation,
     useUpdateGymMutation,
-    useDeleteGymMutation
+    useDeleteGymMutation,
+    useSendContactFormMutation
 } = gymsApi;
