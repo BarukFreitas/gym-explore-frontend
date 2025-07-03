@@ -15,6 +15,7 @@ export interface Review {
     creationDate: string;
     gymId: number;
     userName:string;
+    pointsAwarded: boolean;
 }
 
 export interface ReviewCreatePayload {

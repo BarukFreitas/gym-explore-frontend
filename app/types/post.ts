@@ -10,4 +10,5 @@ export interface PostResponse {
   userId: number;
   username: string;
   imageUrl?: string;
+  pointsAwarded: boolean;
 }
