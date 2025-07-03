@@ -72,7 +72,7 @@ const Navbar = () => {
     z-[100]
     transition-all duration-300 ease-out
     ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
-    ${(scrolled || mobileMenuOpen) ? 'bg-gray-900' : 'bg-transparent'} // CORREÇÃO APLICADA AQUI
+    ${(scrolled || mobileMenuOpen) ? 'bg-gray-900' : 'bg-transparent'}
   `;
 
   return (
@@ -140,7 +140,8 @@ const Navbar = () => {
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: mobileMenuOpen ? 1 : 0, x: mobileMenuOpen ? '0%' : '100%' }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className={`fixed top-0 right-0 h-full w-64 bg-gray-900 border-l border-gray-700 shadow-lg z-50
+            // CORREÇÃO APLICADA AQUI: Adicionado bg-black bg-opacity-100 para garantir opacidade total
+            className={`fixed top-0 right-0 h-full w-64 bg-black bg-opacity-100 border-l border-gray-700 shadow-lg z-50
               transform ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}
               transition-transform duration-300 ease-in-out md:hidden`}
             style={{ pointerEvents: mobileMenuOpen ? 'auto' : 'none' }}
