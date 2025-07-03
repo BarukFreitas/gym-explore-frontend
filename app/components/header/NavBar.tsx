@@ -11,7 +11,7 @@ import { useLocale } from 'next-intl';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import gymExploreLogo from '@/public/logo.png';
 import ButtonLogin from '../button/ButtonLogin';
-import NavBarLogado from './NavBarLogado'; // Importa NavBarLogado, com as props tipadas corretamente agora
+import NavBarLogado from './NavBarLogado';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "@/app/store/store";
 import { clearCredentials } from "@/app/store/authSlice";
@@ -72,7 +72,7 @@ const Navbar = () => {
     z-[100]
     transition-all duration-300 ease-out
     ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
-    ${scrolled ? 'bg-black bg-opacity-30 backdrop-blur-sm' : 'bg-transparent'}
+    ${(scrolled || mobileMenuOpen) ? 'bg-gray-900' : 'bg-transparent'} // CORREÇÃO APLICADA AQUI
   `;
 
   return (
