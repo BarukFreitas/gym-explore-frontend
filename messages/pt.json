@@ -9,7 +9,9 @@
     "logo": "GYM EXPLORE",
     "feed": "Feed",
     "gyms": "Academias",
-    "addGym": "Adicionar Academia"
+    "addGym": "Adicionar Academia",
+    "adminStore": "Admin Loja",
+    "store": "Loja"
   },
   "HeroSection": {
     "title": "Eleve seu treino",

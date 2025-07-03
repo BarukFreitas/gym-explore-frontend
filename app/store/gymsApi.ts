@@ -32,6 +32,25 @@ export interface ContactPayload {
     message: string;
 }
 
+export interface StoreItem {
+    id: number;
+    name: string;
+    description: string;
+    pointsCost: number;
+}
+
+export interface StoreItemCreatePayload {
+    name: string;
+    description: string;
+    pointsCost: number;
+}
+
+// >>> NOVA INTERFACE ADICIONADA AQUI <<<
+export interface PurchasePayload {
+    userId: number;
+    itemId: number;
+}
+
 export type GymCreatePayload = Omit<Gym, 'id'>;
 
 export type GymUpdatePayload = {
@@ -44,8 +63,7 @@ export const gymsApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: "http://localhost:8080/",
     }),
-    // 1. ADICIONE A TAG 'User' AQUI
-    tagTypes: ["Gym", "Review", "User"],
+    tagTypes: ["Gym", "Review", "User", "StoreItem"],
     endpoints: (builder) => ({
         getAllGyms: builder.query<Gym[], void>({
             query: () => "gyms",
@@ -78,10 +96,9 @@ export const gymsApi = createApi({
                 method: 'POST',
                 body: { comment: body.comment, rating: body.rating },
             }),
-            // 2. AJUSTE AQUI PARA INVALIDAR A TAG DO UTILIZADOR
             invalidatesTags: (result, error, { gymId, userId }) => [
                 { type: 'Review', id: gymId },
-                { type: 'User', id: userId } // Invalida a tag do utilizador para forçar o refetch dos pontos
+                { type: 'User', id: userId }
             ],
         }),
 
@@ -111,6 +128,30 @@ export const gymsApi = createApi({
                 body: contactData,
             }),
         }),
+
+        getStoreItems: builder.query<StoreItem[], void>({
+            query: () => 'store/items',
+            providesTags: ['StoreItem']
+        }),
+
+        addStoreItem: builder.mutation<StoreItem, StoreItemCreatePayload>({
+            query: (newItem) => ({
+                url: 'store/admin/items',
+                method: 'POST',
+                body: newItem,
+            }),
+            invalidatesTags: ['StoreItem'],
+        }),
+
+        // >>> NOVO ENDPOINT ADICIONADO AQUI <<<
+        purchaseStoreItem: builder.mutation<void, PurchasePayload>({
+            query: ({ userId, itemId }) => ({
+                url: `store/purchase/user/${userId}/item/${itemId}`,
+                method: 'POST',
+            }),
+            // Invalida a tag do utilizador para forçar a atualização dos pontos na navbar
+            invalidatesTags: (result, error, { userId }) => [{ type: 'User', id: userId }],
+        })
     }),
 });
 
@@ -121,5 +162,8 @@ export const {
     useAddReviewMutation,
     useUpdateGymMutation,
     useDeleteGymMutation,
-    useSendContactFormMutation
+    useSendContactFormMutation,
+    useGetStoreItemsQuery,
+    useAddStoreItemMutation,
+    usePurchaseStoreItemMutation // <<< NOVO HOOK EXPORTADO
 } = gymsApi;

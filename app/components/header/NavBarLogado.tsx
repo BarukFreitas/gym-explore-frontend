@@ -74,6 +74,7 @@ export default function NavBarLogado() {
         { name: t("contact"), path: "contato" },
         { name: t("feed"), path: "feed" },
         { name: t("gyms"), path: "gyms" },
+        { name: t("store"), path: "store" },
     ];
 
     return (

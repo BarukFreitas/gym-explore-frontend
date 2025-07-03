@@ -8,7 +8,9 @@
     "logoutButton": "Logout",
     "feed": "Feed",
     "gyms": "Gyms",
-    "addGym": "Add Gym"
+    "addGym": "Add Gym",
+    "store": "Store",
+    "adminStore": "Admin Store"
   },
   "HeroSection": {
     "title": "Elevate your workout",
