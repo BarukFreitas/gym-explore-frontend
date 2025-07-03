@@ -11,7 +11,7 @@ import { useLocale } from 'next-intl';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import gymExploreLogo from '@/public/logo.png';
 import ButtonLogin from '../button/ButtonLogin';
-import NavBarLogado from './NavBarLogado';
+import NavBarLogado from './NavBarLogado'; // Importa NavBarLogado, com as props tipadas corretamente agora
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "@/app/store/store";
 import { clearCredentials } from "@/app/store/authSlice";
