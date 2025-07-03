@@ -151,7 +151,7 @@ const Navbar = () => {
                 <FaTimes className="text-2xl" />
               </button>
             </div>
-            <ul className="flex flex-col p-4 space-y-2">
+            <ul className="flex flex-col p-4 space-y-2 bg-gray-900">
               {navLinks.map((link) => (
                 <li key={link.label}>
                   <Link
