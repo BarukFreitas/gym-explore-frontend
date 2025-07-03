@@ -44,7 +44,8 @@ export const gymsApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: "http://localhost:8080/",
     }),
-    tagTypes: ["Gym", "Review"],
+    // 1. ADICIONE A TAG 'User' AQUI
+    tagTypes: ["Gym", "Review", "User"],
     endpoints: (builder) => ({
         getAllGyms: builder.query<Gym[], void>({
             query: () => "gyms",
@@ -77,7 +78,11 @@ export const gymsApi = createApi({
                 method: 'POST',
                 body: { comment: body.comment, rating: body.rating },
             }),
-            invalidatesTags: (result, error, { gymId }) => [{ type: 'Review', id: gymId }],
+            // 2. AJUSTE AQUI PARA INVALIDAR A TAG DO UTILIZADOR
+            invalidatesTags: (result, error, { gymId, userId }) => [
+                { type: 'Review', id: gymId },
+                { type: 'User', id: userId } // Invalida a tag do utilizador para forçar o refetch dos pontos
+            ],
         }),
 
         updateGym: builder.mutation<Gym, GymUpdatePayload>({
