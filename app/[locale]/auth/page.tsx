@@ -93,8 +93,12 @@ const AuthPage = () => {
         roles: response.roles,
       }));
       router.push('/');
-    } catch (err) {
+    } catch (err: any) {
       console.error('Falha no login:', err);
+      // Detalhes do erro do backend (melhorado para depuração)
+      if (err.status && err.data) {
+        console.error('Detalhes do erro do backend:', err.data);
+      }
     }
   };
 
@@ -111,13 +115,16 @@ const AuthPage = () => {
       console.log("Roles recebidas do backend (REGISTRO):", response.roles);
       setTabValue(0);
       alert(t("registerSuccess"));
-    } catch (err) {
+    } catch (err: any) {
       console.error('Falha no registro:', err);
+      if (err.status && err.data) {
+        console.error('Detalhes do erro do backend:', err.data);
+      }
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs" sx={{ mt: 8, mb: 4 }}>
+    <Container component="main" maxWidth="xs" sx={{ mt: 32, mb: 4 }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="auth tabs" centered>
           <Tab label={t("loginTab")} {...a11yProps(0)} />
