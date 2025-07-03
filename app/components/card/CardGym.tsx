@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState } from 'react';
-// 1. Importe os novos hooks e componentes necessários
 import { useGetReviewsByGymIdQuery, useDeleteGymMutation, type Gym, type Review } from '@/app/store/gymsApi';
 import CreateReviewModal from '@/app/components/forms/CreateReviewModal';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store/store';
+
 
 interface GymCardProps {
     gym: Gym;
@@ -27,7 +29,13 @@ export default function GymCard({ gym }: GymCardProps) {
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const locale = useLocale();
 
-    // 2. Inicialize o hook para a mutation de exclusão
+    const userRoles = useSelector((state: RootState) => state.auth?.roles || []);
+    console.log("Roles do usuário no Card da Academia:", userRoles);
+
+
+    const canManageGym = (userRoles || []).includes("ROLE_GYM_OWNER") || (userRoles || []).includes("ROLE_ADMIN");
+
+
     const [deleteGym, { isLoading: isDeleting }] = useDeleteGymMutation();
 
     const {
@@ -40,11 +48,9 @@ export default function GymCard({ gym }: GymCardProps) {
 
 
     const handleDelete = async () => {
-
         if (window.confirm('Tem a certeza de que deseja excluir esta academia? Esta ação é irreversível.')) {
             try {
                 await deleteGym(gym.id).unwrap();
-
             } catch (err) {
                 console.error('Falha ao excluir academia:', err);
                 alert('Ocorreu um erro ao excluir a academia.');
@@ -66,21 +72,23 @@ export default function GymCard({ gym }: GymCardProps) {
                     <p className="text-gray-400"><strong>Telefone:</strong> {gym.phone}</p>
                 </div>
 
-                <div className="flex p-2 bg-gray-900 border-t border-gray-700">
-                    <Link
-                        href={`/${locale}/gyms/edit/${gym.id}`}
-                        className="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 rounded-md text-sm mx-1 transition-colors"
-                    >
-                        Editar
-                    </Link>
-                    <button
-                        onClick={handleDelete}
-                        disabled={isDeleting}
-                        className="flex-1 text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-3 rounded-md text-sm mx-1 transition-colors disabled:opacity-50"
-                    >
-                        {isDeleting ? 'A excluir...' : 'Excluir'}
-                    </button>
-                </div>
+                {canManageGym && (
+                    <div className="flex p-2 bg-gray-900 border-t border-gray-700">
+                        <Link
+                            href={`/${locale}/gyms/edit/${gym.id}`}
+                            className="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 rounded-md text-sm mx-1 transition-colors"
+                        >
+                            Editar
+                        </Link>
+                        <button
+                            onClick={handleDelete}
+                            disabled={isDeleting}
+                            className="flex-1 text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-3 rounded-md text-sm mx-1 transition-colors disabled:opacity-50"
+                        >
+                            {isDeleting ? 'A excluir...' : 'Excluir'}
+                        </button>
+                    </div>
+                )}
 
                 <div className="border-t border-gray-700 p-4 space-y-3">
                     <button

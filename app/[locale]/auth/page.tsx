@@ -1,161 +1,250 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, SyntheticEvent } from 'react';
 import {
-  Container,
-  Box,
-  Typography,
   TextField,
   Button,
-  CircularProgress,
-  Alert,
-  Link as MuiLink,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem
-} from "@mui/material";
-import { useTranslations } from "next-intl";
-import { useLoginUserMutation, useRegisterUserMutation } from "@/app/store/authApi";
-import { UserRegisterRequest, UserLoginRequest, ErrorResponse } from "@/app/types/auth";
-import { useDispatch } from "react-redux";
-import { setCredentials } from "@/app/store/authSlice";
-import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Box,
+  Alert,
+  Typography,
+  Tabs,
+  Tab,
+  Container
+} from '@mui/material';
+import { useRegisterUserMutation, useLoginUserMutation } from '@/app/store/authApi';
+import { UserRegisterRequest, UserLoginRequest, UserAuthResponse, ErrorResponse } from '@/app/types/auth';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '@/app/store/authSlice';
 
-export default function AuthPage() {
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+const AuthPage = () => {
   const t = useTranslations("AuthPage");
-  const dispatch = useDispatch();
   const router = useRouter();
-  const locale = useLocale();
+  const dispatch = useDispatch();
 
-  const [isRegisterMode, setIsRegisterMode] = useState(false);
+  const [tabValue, setTabValue] = useState(0);
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("ROLE_USER");
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginUser, { isLoading: isLoginLoading, error: loginError }] = useLoginUserMutation();
 
-  const [loginUser, { isLoading: isLoginLoading, error: loginError, isSuccess: isLoginSuccess }] = useLoginUserMutation();
+  const [registerUsername, setRegisterUsername] = useState('');
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  const [selectedRole, setSelectedRole] = useState('ROLE_USER');
   const [registerUser, { isLoading: isRegisterLoading, error: registerError, isSuccess: isRegisterSuccess }] = useRegisterUserMutation();
+
+  const handleTabChange = (event: SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+    const loginRequest: UserLoginRequest = {
+      username: loginUsername,
+      password: loginPassword,
+    };
     try {
-      const result = await loginUser({ username, password } as UserLoginRequest).unwrap();
-      dispatch(setCredentials({ id: result.id, username: result.username, email: result.email, roles: result.roles }));
-      router.push(`/${locale}/feed`);
-    } catch (err: any) {
-      console.error("Failed to log in:", err);
+      const response: UserAuthResponse = await loginUser(loginRequest).unwrap();
+      console.log("Roles recebidas do backend (LOGIN):", response.roles);
+      dispatch(setCredentials({
+        id: response.id,
+        username: response.username,
+        email: response.email,
+        roles: response.roles,
+      }));
+      router.push('/');
+    } catch (err) {
+      console.error('Falha no login:', err);
     }
   };
 
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
+    const registerRequest: UserRegisterRequest = {
+      username: registerUsername,
+      email: registerEmail,
+      password: registerPassword,
+      role: selectedRole,
+    };
     try {
-      const result = await registerUser({ username, email, password, role } as UserRegisterRequest).unwrap();
-      setIsRegisterMode(false);
-      setUsername("");
-      setEmail("");
-      setPassword("");
-      setRole("ROLE_USER");
-    } catch (err: any) {
-      console.error("Failed to register:", err);
+      const response: UserAuthResponse = await registerUser(registerRequest).unwrap();
+      console.log("Roles recebidas do backend (REGISTRO):", response.roles);
+      setTabValue(0);
+      alert(t("registerSuccess"));
+    } catch (err) {
+      console.error('Falha no registro:', err);
     }
   };
 
-  const currentError = isRegisterMode ? registerError : loginError;
-
   return (
-    <Container component="main" maxWidth="sm" className="min-h-screen flex items-center justify-center pt-20 pb-10">
-      <Box className="flex flex-col items-center p-6 rounded-lg shadow-xl bg-white w-full">
-        <Typography variant="h5" component="h1" className="mb-4 text-green-600">
-          {isRegisterMode ? t("registerTitle") : t("loginTitle")}
+    <Container component="main" maxWidth="xs" sx={{ mt: 8, mb: 4 }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={tabValue} onChange={handleTabChange} aria-label="auth tabs" centered>
+          <Tab label={t("loginTab")} {...a11yProps(0)} />
+          <Tab label={t("registerTab")} {...a11yProps(1)} />
+        </Tabs>
+      </Box>
+
+      <CustomTabPanel value={tabValue} index={0}>
+        <Typography component="h1" variant="h5" sx={{ mb: 3 }} textAlign="center">
+          {t("loginTitle")}
         </Typography>
-
-        {isLoginSuccess && !isRegisterMode && (
-          <Alert severity="success" className="w-full mb-4">{t("loginSuccessMessage")}</Alert>
-        )}
-        {isRegisterSuccess && !isRegisterMode && (
-          <Alert severity="success" className="w-full mb-4">{t("registerSuccessMessage")}</Alert>
-        )}
-        {currentError && (
-          <Alert severity="error" className="w-full mb-4">
-            {(currentError as ErrorResponse)?.error || (isRegisterMode ? t("registerGenericErrorMessage") : t("loginGenericErrorMessage"))}
-          </Alert>
-        )}
-
-        <Box component="form" onSubmit={isRegisterMode ? handleRegister : handleLogin} className="w-full space-y-4">
+        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
           <TextField
-            fullWidth
-            label={t("usernameLabel")}
-            variant="outlined"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            margin="normal"
             required
-          />
-          {isRegisterMode && (
-            <TextField
-              fullWidth
-              label={t("emailLabel")}
-              type="email"
-              variant="outlined"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          )}
-          <TextField
             fullWidth
+            id="loginUsername"
+            label={t("usernameLabel")}
+            name="username"
+            autoComplete="username"
+            autoFocus
+            value={loginUsername}
+            onChange={(e) => setLoginUsername(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
             label={t("passwordLabel")}
             type="password"
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            id="loginPassword"
+            autoComplete="current-password"
+            value={loginPassword}
+            onChange={(e) => setLoginPassword(e.target.value)}
           />
-          {isRegisterMode && (
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="role-label">{t("selectRole")}</InputLabel>
-              <Select
-                labelId="role-label"
-                id="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value as string)}
-                label={t("selectRole")}
-              >
-                <MenuItem value="ROLE_USER">{t("roleUser")}</MenuItem>
-                <MenuItem value="ROLE_GYM_OWNER">{t("roleGymOwner")}</MenuItem>
-              </Select>
-            </FormControl>
-          )}
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            color="primary"
-            sx={{ mt: 2, mb: 2 }}
-            disabled={isLoginLoading || isRegisterLoading}
-            className="bg-green-600 hover:bg-green-700 text-white"
+            sx={{ mt: 3, mb: 2 }}
+            disabled={isLoginLoading}
           >
-            {isLoginLoading || isRegisterLoading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : isRegisterMode ? (
-              t("registerButton")
-            ) : (
-              t("loginButton")
-            )}
+            {isLoginLoading ? t("loggingIn") : t("loginButton")}
           </Button>
+          {loginError && (
+            <Alert severity="error">
+              {(loginError as any)?.data?.error || t("loginError")}
+            </Alert>
+          )}
         </Box>
-        <MuiLink
-          component="button"
-          variant="body2"
-          onClick={() => setIsRegisterMode(!isRegisterMode)}
-          className="text-green-600 hover:underline"
-        >
-          {isRegisterMode ? t("alreadyHaveAccount") : t("dontHaveAccount")}
-        </MuiLink>
-      </Box>
+      </CustomTabPanel>
+
+      <CustomTabPanel value={tabValue} index={1}>
+        <Typography component="h1" variant="h5" sx={{ mb: 3 }} textAlign="center">
+          {t("registerTitle")}
+        </Typography>
+        <Box component="form" onSubmit={handleRegister} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="registerUsername"
+            label={t("usernameLabel")}
+            name="username"
+            autoComplete="new-username"
+            value={registerUsername}
+            onChange={(e) => setRegisterUsername(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="registerEmail"
+            label={t("emailLabel")}
+            name="email"
+            autoComplete="email"
+            type="email"
+            value={registerEmail}
+            onChange={(e) => setRegisterEmail(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label={t("passwordLabel")}
+            type="password"
+            id="registerPassword"
+            autoComplete="new-password"
+            value={registerPassword}
+            onChange={(e) => setRegisterPassword(e.target.value)}
+          />
+
+          <FormControl component="fieldset" margin="normal" fullWidth>
+            <FormLabel component="legend">{t("userTypeLabel")}</FormLabel>
+            <RadioGroup
+              row
+              value={selectedRole}
+              onChange={(event) => setSelectedRole(event.target.value)}
+              sx={{ justifyContent: 'center' }}
+            >
+              <FormControlLabel value="ROLE_USER" control={<Radio />} label={t("commonUser")} />
+              <FormControlLabel value="ROLE_GYM_OWNER" control={<Radio />} label={t("gymOwner")} />
+            </RadioGroup>
+          </FormControl>
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            disabled={isRegisterLoading}
+          >
+            {isRegisterLoading ? t("registering") : t("registerButton")}
+          </Button>
+
+          {isRegisterSuccess && <Alert severity="success">{t("registerSuccess")}</Alert>}
+          {registerError && (
+            <Alert severity="error">
+              {(registerError as any)?.data?.error || t("registerError")}
+            </Alert>
+          )}
+        </Box>
+      </CustomTabPanel>
     </Container>
   );
-}
+};
+
+export default AuthPage;

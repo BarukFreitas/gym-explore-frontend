@@ -86,7 +86,6 @@ function NavBarLogado({ onLogout, username }: NavBarLogadoProps) {
             variant="h6"
             noWrap
             component="a"
-            href={`/${locale}`}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
