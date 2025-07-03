@@ -5,7 +5,7 @@ export interface PointsResponse {
   points: number;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const authApi = createApi({
   reducerPath: "authApi",

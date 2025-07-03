@@ -1,17 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { PostCreateRequest, PostResponse } from "@/app/types/post";
 import { ErrorResponse } from "@/app/types/auth";
-// REMOVA a linha abaixo que importa RootState de "./store"
-// import { RootState } from "./store";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 export const postApi = createApi({
   reducerPath: "postApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8080/api/posts",
+    baseUrl: API_BASE_URL,
     prepareHeaders: (headers, { getState }) => {
-      // Adicionar token de autenticação se disponível
-      // Altere 'as RootState' para 'as any' ou defina um tipo mais específico para o slice de autenticação
-      const token = (getState() as any).auth.token; // Alterado aqui
+      const token = (getState() as any).auth.token;
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
