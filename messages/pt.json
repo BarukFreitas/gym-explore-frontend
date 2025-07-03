@@ -131,16 +131,20 @@
     "registering": "Registrando..."
   },
   "FeedPage": {
-    "feedTitle": "Meu Feed de Atividades",
-    "newPostPlaceholder": "Escreva sua postagem...",
+    "feedTitle": "Seu Feed",
+    "newPostPlaceholder": "O que você está pensando?",
     "imageUrlPlaceholder": "URL da Imagem (opcional)",
-    "postButton": "Publicar",
-    "recentPostsTitle": "Postagens Recentes",
-    "noPostsYet": "Nenhuma postagem ainda. Seja o primeiro a publicar!",
+    "postButton": "Postar",
+    "recentPostsTitle": "Posts Recentes",
     "emptyPostError": "O conteúdo da postagem não pode estar vazio.",
     "notLoggedInToPostError": "Você precisa estar logado para criar uma postagem.",
-    "genericPostError": "Ocorreu um erro ao criar a postagem. Tente novamente.",
+    "genericPostError": "Ocorreu um erro ao criar a postagem.",
     "postSuccessMessage": "Postagem criada com sucesso!",
-    "errorLoadingPosts": "Erro ao carregar postagens."
+    "noPostsYet": "Ainda não há postagens. Seja o primeiro a postar!",
+    "deletePostButton": "Excluir",
+    "confirmDeletePost": "Tem certeza que deseja excluir esta postagem?",
+    "postDeletedSuccess": "Postagem excluída com sucesso!",
+    "postDeletedError": "Ocorreu um erro ao excluir a postagem.",
+    "feedBackgroundImageAlt": "Imagem de fundo de uma academia com equipamentos de ginástica"
   }
 }
