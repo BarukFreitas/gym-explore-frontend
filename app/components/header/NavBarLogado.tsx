@@ -25,13 +25,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store/store";
 import { clearCredentials } from "@/app/store/authSlice";
 // 1. IMPORTE O HOOK PARA BUSCAR OS PONTOS
-import { useGetUserPointsQuery } from "@/app/store/authApi"; // Verifique se o caminho do import está correto
+import { useGetUserPointsQuery } from "@/app/store/authApi";
 
-// A interface de props pode ser removida ou ajustada,
-// pois agora obtemos a maioria dos dados do Redux.
-export interface NavBarLogadoProps {}
+// Remova ou atualize a interface NavBarLogadoProps
+// Antes: export interface NavBarLogadoProps {}
+// Agora:
+export interface NavBarLogadoProps {
+  onLogout: () => void;
+  username: string;
+}
 
-export default function NavBarLogado() {
+export default function NavBarLogado({ onLogout, username }: NavBarLogadoProps) { // Adicione as props aqui
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [openUserDrawer, setOpenUserDrawer] = useState(false);
 
@@ -41,7 +45,7 @@ export default function NavBarLogado() {
     const dispatch = useDispatch();
 
     // 2. Obtenha os dados do utilizador diretamente do estado do Redux
-    const { id: userId, username, email, roles: userRoles } = useSelector((state: RootState) => state.auth);
+    const { id: userId, email, roles: userRoles } = useSelector((state: RootState) => state.auth);
 
     // 3. Chame o hook para buscar os pontos, usando o ID do utilizador do estado
     const { data: pointsData, isLoading: isLoadingPoints } = useGetUserPointsQuery(userId!, {
@@ -58,6 +62,7 @@ export default function NavBarLogado() {
 
     const handleLogoutClick = () => {
         dispatch(clearCredentials()); // Despacha a ação correta
+        onLogout(); // Chama a função onLogout passada via props
         handleCloseUserDrawer();
     };
 
