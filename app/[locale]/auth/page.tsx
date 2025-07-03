@@ -111,8 +111,12 @@ const AuthPage = () => {
       console.log("Roles recebidas do backend (REGISTRO):", response.roles);
       setTabValue(0);
       alert(t("registerSuccess"));
-    } catch (err) {
-      console.error('Falha no registro:', err);
+    } catch (err: any) { // Adicionar ': any' para facilitar o log, ou tipar melhor se souber a estrutura
+      console.error('Falha no registro:', err); // Log mais detalhado do erro
+      // Você pode logar a parte específica do erro que vem do backend
+      if (err.status && err.data) {
+        console.error('Detalhes do erro do backend:', err.data);
+      }
     }
   };
 
