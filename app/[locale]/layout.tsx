@@ -7,6 +7,9 @@ import "./globals.css";
 import ClientLayout from "./ClientLayout";
 import Footer from "../components/footer/Footer";
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -23,9 +26,9 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-  children,
-  params
-}: Readonly<{
+                                           children,
+                                           params
+                                         }: Readonly<{
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }>) {
@@ -36,17 +39,30 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale}>
+      <html lang={locale}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider>
-          <ClientLayout>
-            {children}
-            <Footer />
-          </ClientLayout>
-        </NextIntlClientProvider>
+      <NextIntlClientProvider>
+        <ClientLayout>
+          {children}
+          <Footer />
+        </ClientLayout>
+      </NextIntlClientProvider>
+
+      <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+      />
       </body>
-    </html>
+      </html>
   );
 }
