@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+
 export interface Gym {
     id: number;
     name: string;
@@ -42,7 +44,7 @@ export type GymUpdatePayload = {
 export const gymsApi = createApi({
     reducerPath: "gymsApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://localhost:8080/",
+        baseUrl: API_BASE_URL,
     }),
     tagTypes: ["Gym", "Review"],
     endpoints: (builder) => ({
@@ -82,7 +84,7 @@ export const gymsApi = createApi({
 
         updateGym: builder.mutation<Gym, GymUpdatePayload>({
             query: ({ id, body }) => ({
-                url: `gyms/${id}`,
+                url: `gyms/${id}`, 
                 method: 'PUT',
                 body,
             }),

@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { PostCreateRequest, PostResponse } from "@/app/types/post";
 import { ErrorResponse } from "@/app/types/auth";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 export const postApi = createApi({
   reducerPath: "postApi",
@@ -20,7 +20,7 @@ export const postApi = createApi({
   endpoints: (builder) => ({
     createPost: builder.mutation<PostResponse, { userId: number; data: PostCreateRequest }>({
       query: ({ userId, data }) => ({
-        url: `/${userId}`,
+        url: `/api/posts/${userId}`, 
         method: "POST",
         body: data,
       }),
@@ -28,13 +28,13 @@ export const postApi = createApi({
       transformErrorResponse: (response: { status: number; data: ErrorResponse }) => response.data,
     }),
     getAllPosts: builder.query<PostResponse[], void>({
-      query: () => "/",
+      query: () => "/api/posts/", 
       providesTags: ["Post"],
       transformErrorResponse: (response: { status: number; data: ErrorResponse }) => response.data,
     }),
     deletePost: builder.mutation<void, number>({
       query: (postId) => ({
-        url: `/${postId}`,
+        url: `/api/posts/${postId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Post"],
