@@ -66,14 +66,14 @@ const Navbar = () => {
     { label: t("contact"), href: `/${locale}/contato` },
   ];
 
-  // CLASSES RESTAURADAS: A barra de navegação principal tem a transparência original
+  // CORREÇÃO APLICADA AQUI: Navbar principal sempre terá um fundo sólido.
   const navbarClasses = `
     fixed top-0 left-0 right-0 w-full
     py-4 px-4 md:px-8 lg:px-16
     z-[100]
     transition-all duration-300 ease-out
     ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
-    ${scrolled ? 'bg-black bg-opacity-30 backdrop-blur-sm' : 'bg-transparent'}
+    ${scrolled ? 'bg-black bg-opacity-30 backdrop-blur-sm' : 'bg-gray-950'}
   `;
 
   return (
@@ -141,7 +141,6 @@ const Navbar = () => {
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: mobileMenuOpen ? 1 : 0, x: mobileMenuOpen ? '0%' : '100%' }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            // CLASSES RESTAURADAS: O menu lateral mobile (drawer) tem o bg-gray-900 original
             className={`fixed top-0 right-0 h-full w-64 bg-gray-900 border-l border-gray-700 shadow-lg z-50
               transform ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}
               transition-transform duration-300 ease-in-out md:hidden`}
@@ -152,7 +151,7 @@ const Navbar = () => {
                 <FaTimes className="text-2xl" />
               </button>
             </div>
-            <ul className="flex flex-col p-4 space-y-2 bg-gray-900">
+            <ul className="flex flex-col p-4 space-y-2">
               {navLinks.map((link) => (
                 <li key={link.label}>
                   <Link
