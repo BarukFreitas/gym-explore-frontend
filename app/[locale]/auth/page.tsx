@@ -87,15 +87,15 @@ const AuthPage = () => {
       const response: UserAuthResponse = await loginUser(loginRequest).unwrap();
       console.log("Roles recebidas do backend (LOGIN):", response.roles);
       dispatch(setCredentials({
+        points: 0, token: "",
         id: response.id,
         username: response.username,
         email: response.email,
-        roles: response.roles,
+        roles: response.roles
       }));
       router.push('/');
     } catch (err: any) {
       console.error('Falha no login:', err);
-      // Detalhes do erro do backend (melhorado para depuração)
       if (err.status && err.data) {
         console.error('Detalhes do erro do backend:', err.data);
       }
