@@ -1,180 +1,193 @@
-// 1. O import do useEffect é necessário para a atualização dos pontos
-import React, { useState, useEffect } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import siteLogo from "@/public/logo.png";
-import Image from "next/image"; // Mantenha a importação do Image
+'use client';
 
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { usePathname } from "next/navigation"; // O usePathname é a chave para a atualização
-import { useLocale } from "next-intl";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect, type FC } from 'react'; // Adicionado 'type FC' aqui
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
+import { useLocale } from 'next-intl';
+
+import { FaBars, FaTimes } from 'react-icons/fa';
+import gymExploreLogo from '@/public/logo.png';
+import ButtonLogin from '../button/ButtonLogin';
+import NavBarLogado from './NavBarLogado';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "@/app/store/store";
 import { clearCredentials } from "@/app/store/authSlice";
-import { useGetUserPointsQuery } from "@/app/store/authApi"; // Importe o hook dos pontos
 
-// ADIÇÃO: Interface para as props esperadas
-interface NavBarLogadoProps {
-    onLogout: () => void;
-    username: string;
-}
+// CORREÇÃO: Tipagem explícita para o componente Navbar para indicar que não recebe props
+const Navbar: FC = () => {
+  const t = useTranslations("Navbar");
+  const locale = useLocale();
+  const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [scrolled, setScrolled] = useState(0);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
-// CORREÇÃO: Adicione as props ao componente
-export default function NavBarLogado({ onLogout, username }: NavBarLogadoProps) {
-    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-    const [openUserDrawer, setOpenUserDrawer] = useState(false);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const username = useSelector((state: RootState) => state.auth.username);
 
-    const t = useTranslations("Navbar");
-    const pathname = usePathname(); // Variável que deteta a mudança de URL
-    const locale = useLocale();
-    const dispatch = useDispatch();
+  const isContactPage = pathname.includes('/contact') || pathname.includes('/contato');
 
-    // Obtenha os dados do utilizador, incluindo o ID, do estado do Redux
-    const { id: userId, roles, email } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
 
-    // 2. OBTENHA A FUNÇÃO 'refetch' DO HOOK
-    const { data: pointsData, isLoading: isLoadingPoints, refetch } = useGetUserPointsQuery(userId!, {
-        skip: !userId,
-    });
+  const handleLogout = () => {
+    dispatch(clearCredentials());
+  };
 
-    // 3. ESTE useEffect GARANTE A ATUALIZAÇÃO DOS PONTOS
-    // Ele "ouve" as mudanças no 'pathname' (URL) e chama o refetch.
-    useEffect(() => {
-        if (userId) {
-            refetch();
-        }
-    }, [pathname, userId, refetch]);
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollThreshold = isContactPage ? 50 : 200;
 
+      if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY || currentScrollY <= scrollThreshold / 2) {
+        setIsVisible(true);
+      }
+      setLastScrollY(currentScrollY);
 
-    const showCreateGymButton = (roles || []).includes("ROLE_GYM_OWNER") || (roles || []).includes("ROLE_ADMIN");
+      setScrolled(currentScrollY > 10 ? 1 : 0);
+    };
 
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorElNav(event.currentTarget);
-    const handleCloseNavMenu = () => setAnchorElNav(null);
-    const handleOpenUserDrawer = () => setOpenUserDrawer(true);
-    const handleCloseUserDrawer = () => setOpenUserDrawer(false);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY, isContactPage]);
 
-    // REMOVIDO: A função handleLogoutClick não é mais necessária aqui, pois a prop onLogout já faz isso.
-    // const handleLogoutClick = () => {
-    //     dispatch(clearCredentials());
-    //     handleCloseUserDrawer();
-    // };
+  const handleMobileMenuToggle = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
 
-    // A sua lista de páginas original, mantida como estava
-    const pages = [
-        { name: t("home"), path: "" },
-        { name: t("services"), path: "servicos" },
-        { name: t("about"), path: "sobre" },
-        { name: t("contact"), path: "contato" },
-        { name: t("feed"), path: "feed" },
-        { name: t("gyms"), path: "gyms" },
-        { name: t("store"), path: "store" },
-    ];
+  const navLinks = [
+    { label: t("home"), href: `/${locale}/` },
+    { label: t("about"), href: `/${locale}/sobre` },
+    { label: t("services"), href: `/${locale}/servicos` },
+    { label: t("contact"), href: `/${locale}/contato` },
+  ];
 
-    return (
-        <AppBar position="fixed" sx={{ backgroundColor: "rgb(28, 28, 28)" }}>
-            <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                    <Box component={Image} src={siteLogo} alt="Gym Explore Logo" sx={{ display: { xs: "none", md: "flex" }, mr: 1, height: 40, width: 'auto' }} />
-                    <Typography variant="h6" noWrap component="a" href={`/${locale}`} sx={{ mr: 2, display: { xs: "none", md: "flex" }, fontFamily: "monospace", fontWeight: 700, color: "inherit", textDecoration: "none" }}>
-                        {t("logo")}
-                    </Typography>
+  const navbarClasses = `
+    fixed top-0 left-0 right-0 w-full
+    py-4 px-4 md:px-8 lg:px-16
+    z-[100]
+    transition-all duration-300 ease-out
+    ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
+    ${scrolled ? 'bg-black bg-opacity-30 backdrop-blur-sm' : 'bg-gray-950'}
+  `;
 
-                    {/* Menu Mobile, mantido como estava */}
-                    <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-                        <IconButton size="large" onClick={handleOpenNavMenu} color="inherit">
-                            <MenuIcon />
-                        </IconButton>
-                        <Menu id="menu-appbar" anchorEl={anchorElNav} open={Boolean(anchorElNav)} onClose={handleCloseNavMenu} sx={{ display: { xs: "block", md: "none" } }} >
-                            {pages.map((page) => (
-                                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                                    <Link href={`/${locale}/${page.path}`} passHref>
-                                        <Typography textAlign="center" sx={{ color: pathname === `/${locale}/${page.path}` ? "primary.main" : "inherit", textDecoration: "none" }}>
-                                            {page.name}
-                                        </Typography>
-                                    </Link>
-                                </MenuItem>
-                            ))}
-                            {showCreateGymButton && (
-                                <MenuItem onClick={handleCloseNavMenu}>
-                                    <Link href={`/${locale}/gyms/create`} passHref>
-                                        <Typography textAlign="center" sx={{ color: pathname === `/${locale}/gyms/create` ? "primary.main" : "inherit", textDecoration: "none" }}>
-                                            {t("addGym")}
-                                        </Typography>
-                                    </Link>
-                                </MenuItem>
-                            )}
-                        </Menu>
-                    </Box>
+  return (
+    <>
+      {isLoggedIn ? (
+        <NavBarLogado onLogout={handleLogout} username={username || "Usuário"} />
+      ) : (
+        <nav className={navbarClasses}>
+          <div className="container mx-auto flex justify-between items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Link href={`/${locale}/`}>
+                <Image
+                  src={gymExploreLogo}
+                  alt="Gym Explore Logo"
+                  width={70}
+                  height={55}
+                  priority
+                  className="cursor-pointer"
+                />
+              </Link>
+            </motion.div>
 
-                    <Typography variant="h5" noWrap component="a" href={`/${locale}`} sx={{ mr: 2, display: { xs: "flex", md: "none" }, flexGrow: 1, fontFamily: "monospace", fontWeight: 700, color: "inherit", textDecoration: "none" }}>
-                        {t("logo")}
-                    </Typography>
+            <div className="hidden md:flex space-x-6 lg:space-x-8">
+              {navLinks.map((link, index) => (
+                <motion.div
+                  key={link.label}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 * index }}
+                >
+                  <Link
+                    href={link.href}
+                    className="text-white hover:text-green-500 font-semibold hover:scale-105 transition-transform duration-300"
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
 
-                    {/* Menu Desktop, mantido como estava */}
-                    <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                        {pages.map((page) => (
-                            <Button key={page.name} sx={{ my: 2, color: "white", display: "block" }}>
-                                <Link href={`/${locale}/${page.path}`} passHref>
-                                    <Typography textAlign="center" sx={{ color: pathname === `/${locale}/${page.path}` ? "green" : "inherit", textDecoration: "none" }}>
-                                        {page.name}
-                                    </Typography>
-                                </Link>
-                            </Button>
-                        ))}
-                        {showCreateGymButton && (
-                            <Button sx={{ my: 2, color: "white", display: "block" }}>
-                                <Link href={`/${locale}/gyms/create`} passHref>
-                                    <Typography textAlign="center" sx={{ color: pathname === `/${locale}/gyms/create` ? "primary.main" : "inherit", textDecoration: "none" }}>
-                                        {t("addGym")}
-                                    </Typography>
-                                </Link>
-                            </Button>
-                        )}
-                    </Box>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="hidden md:block"
+            >
+              {!isLoggedIn && <ButtonLogin />}
+            </motion.div>
 
-                    {/* Botão para abrir o menu lateral direito */}
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Abrir menu do utilizador">
-                            <IconButton onClick={handleOpenUserDrawer} sx={{ p: 0 }}>
-                                <MenuIcon sx={{ color: "white" }} />
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
-                </Toolbar>
-            </Container>
+            <div className="md:hidden">
+              <button
+                onClick={handleMobileMenuToggle}
+                className="text-white focus:outline-none"
+              >
+                <FaBars className="text-2xl" />
+              </button>
+            </div>
+          </div>
 
-            {/* Drawer (Menu Lateral Direito) */}
-            <Drawer anchor="right" open={openUserDrawer} onClose={handleCloseUserDrawer} PaperProps={{ sx: { backgroundColor: "rgb(28, 28, 28)", color: "white", width: 250 } }}>
-                <Toolbar />
-                <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    {username && <Typography variant="h6" sx={{ mb: 0.5 }}>{username}</Typography>}
-                    {email && <Typography variant="body2" sx={{ mb: 2, color: 'rgba(255, 255, 255, 0.7)' }}>{email}</Typography>}
+          <motion.div
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: mobileMenuOpen ? 1 : 0, x: mobileMenuOpen ? '0%' : '100%' }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className={`fixed top-0 right-0 h-full w-64 bg-gray-900 border-l border-gray-700 shadow-lg z-50
+              transform ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}
+              transition-transform duration-300 ease-in-out md:hidden`}
+            style={{ pointerEvents: mobileMenuOpen ? 'auto' : 'none' }}
+          >
+            <div className="flex justify-end p-4">
+              <button onClick={handleMobileMenuToggle} className="text-white focus:outline-none">
+                <FaTimes className="text-2xl" />
+              </button>
+            </div>
+            <ul className="flex flex-col p-4 space-y-2 bg-gray-900">
+              {navLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    onClick={handleMobileMenuToggle}
+                    className="block text-white hover:bg-green-700 hover:text-white px-4 py-2 rounded-md transition-colors duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              <li className="mt-4 pt-4 border-t border-gray-700">
+                {!isLoggedIn && (
+                  <Link
+                    href={`/${locale}/auth`}
+                    onClick={handleMobileMenuToggle}
+                    className="block bg-green-600 text-white text-center py-2 rounded-md font-semibold hover:bg-green-700 transition-colors duration-300"
+                  >
+                    {t("joinNow")}
+                  </Link>
+                )}
+                {isLoggedIn && (
+                  <button
+                    onClick={() => { handleLogout(); handleMobileMenuToggle(); }}
+                    className="block bg-red-600 text-white text-center py-2 rounded-md font-semibold hover:bg-red-700 transition-colors duration-300 w-full"
+                  >
+                    {t("logoutButton")}
+                  </button>
+                )}
+              </li>
+            </ul>
+          </motion.div>
+        </nav>
+      )}
+    </>
+  );
+};
 
-                    {/* 4. EXIBIÇÃO DOS PONTOS NO MENU LATERAL */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'rgba(255, 255, 255, 0.1)', p: '4px 12px', borderRadius: '20px', mb: 2 }}>
-                        <Typography sx={{ color: '#facc15', fontSize: '1rem' }}>★</Typography>
-                        <Typography sx={{ color: 'white', fontSize: '0.9rem', fontWeight: '500' }}>
-                            {isLoadingPoints ? '...' : (pointsData?.points ?? 0)} Pontos
-                        </Typography>
-                    </Box>
-                </Box>
-                <Divider sx={{ my: 0.5, bgcolor: 'rgba(255, 255, 255, 0.12)' }} />
-                <MenuItem onClick={() => { onLogout(); handleCloseUserDrawer(); }} sx={{ justifyContent: 'center' }}>
-                    <Typography textAlign="center">{t("logoutButton")}</Typography>
-                </MenuItem>
-            </Drawer>
-        </AppBar>
-    );
-}
+export default Navbar;

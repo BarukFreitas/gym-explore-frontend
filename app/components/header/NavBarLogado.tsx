@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 // 1. O import do useEffect é necessário para a atualização dos pontos
 import React, { useState, useEffect } from "react";
@@ -27,8 +27,14 @@ import { RootState } from "@/app/store/store";
 import { clearCredentials } from "@/app/store/authSlice";
 import { useGetUserPointsQuery } from "@/app/store/authApi"; // Importe o hook dos pontos
 
-// Removidas as props, pois os dados vêm do Redux
-export default function NavBarLogado() {
+// ADIÇÃO: Interface para as props esperadas
+interface NavBarLogadoProps {
+    onLogout: () => void;
+    username: string;
+}
+
+// CORREÇÃO: Adicione as props ao componente
+export default function NavBarLogado({ onLogout, username }: NavBarLogadoProps) {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [openUserDrawer, setOpenUserDrawer] = useState(false);
 
@@ -38,7 +44,7 @@ export default function NavBarLogado() {
     const dispatch = useDispatch();
 
     // Obtenha os dados do utilizador, incluindo o ID, do estado do Redux
-    const { id: userId, username, email, roles: userRoles } = useSelector((state: RootState) => state.auth);
+    const { id: userId, roles, email } = useSelector((state: RootState) => state.auth);
 
     // 2. OBTENHA A FUNÇÃO 'refetch' DO HOOK
     const { data: pointsData, isLoading: isLoadingPoints, refetch } = useGetUserPointsQuery(userId!, {
@@ -54,17 +60,18 @@ export default function NavBarLogado() {
     }, [pathname, userId, refetch]);
 
 
-    const showCreateGymButton = (userRoles || []).includes("ROLE_GYM_OWNER") || (userRoles || []).includes("ROLE_ADMIN");
+    const showCreateGymButton = (roles || []).includes("ROLE_GYM_OWNER") || (roles || []).includes("ROLE_ADMIN");
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorElNav(event.currentTarget);
     const handleCloseNavMenu = () => setAnchorElNav(null);
     const handleOpenUserDrawer = () => setOpenUserDrawer(true);
     const handleCloseUserDrawer = () => setOpenUserDrawer(false);
 
-    const handleLogoutClick = () => {
-        dispatch(clearCredentials());
-        handleCloseUserDrawer();
-    };
+    // REMOVIDO: A função handleLogoutClick não é mais necessária aqui, pois a prop onLogout já faz isso.
+    // const handleLogoutClick = () => {
+    //     dispatch(clearCredentials());
+    //     handleCloseUserDrawer();
+    // };
 
     // A sua lista de páginas original, mantida como estava
     const pages = [
@@ -166,7 +173,7 @@ export default function NavBarLogado() {
                     </Box>
                 </Box>
                 <Divider sx={{ my: 0.5, bgcolor: 'rgba(255, 255, 255, 0.12)' }} />
-                <MenuItem onClick={handleLogoutClick} sx={{ justifyContent: 'center' }}>
+                <MenuItem onClick={() => { onLogout(); handleCloseUserDrawer(); }} sx={{ justifyContent: 'center' }}>
                     <Typography textAlign="center">{t("logoutButton")}</Typography>
                 </MenuItem>
             </Drawer>
