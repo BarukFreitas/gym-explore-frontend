@@ -130,7 +130,8 @@
     "loginTab": "Login",
     "registerTab": "Registro",
     "loggingIn": "Entrando...",
-    "registering": "Registrando..."
+    "registering": "Registrando...",
+    "forgotPasswordLink": "Esqueceu a sua senha?"
   },
   "FeedPage": {
     "feedTitle": "Seu Feed",

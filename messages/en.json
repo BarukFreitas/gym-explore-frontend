@@ -129,7 +129,8 @@
     "loginTab": "Login",
     "registerTab": "Register",
     "loggingIn": "Logging In...",
-    "registering": "Registering..."
+    "registering": "Registering...",
+    "forgotPasswordLink": "Forgot your password?"
   },
   "FeedPage": {
     "feedTitle": "Activity Feed",
