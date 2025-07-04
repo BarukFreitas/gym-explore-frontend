@@ -3,8 +3,7 @@
 import React from 'react';
 
 import { useGetStoreItemsQuery } from '@/app/store/gymsApi';
-import { useGetUserPointsQuery } from '@/app/store/authApi'; // Corrigido para apontar para authApi
-
+import { useGetUserPointsQuery } from '@/app/store/authApi';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store/store';
 import StoreItemCard from '@/app/components/store/StoreItemCard';
@@ -19,7 +18,7 @@ export default function StorePage() {
 
     const { id: userId, roles, points: userPoints } = useSelector((state: RootState) => state.auth);
 
-    // Agora o TypeScript encontra o hook porque o import está correto
+
     const { data: pointsData, isLoading: isLoadingPoints } = useGetUserPointsQuery(userId!, {
         skip: !userId,
     });
@@ -48,7 +47,6 @@ export default function StorePage() {
                     <StoreItemCard
                         key={item.id}
                         item={item}
-                        // Use os pontos do hook, que estão sempre atualizados
                         currentUserPoints={pointsData?.points || 0}
                         userId={userId!}
                     />
