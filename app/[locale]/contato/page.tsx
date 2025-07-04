@@ -15,7 +15,7 @@ export default function Contato() {
   const t = useTranslations('ContactPage');
 
   return (
-    <section className="relative min-h-screen bg-gray-900 text-white py-16 md:py-24 flex items-center">
+    <section className="relative min-h-screen bg-gray-900 text-white pt-16 md:pt-32 pb-16">
       <div className="absolute inset-0 z-0">
         <Image
           src={contactBgImage}

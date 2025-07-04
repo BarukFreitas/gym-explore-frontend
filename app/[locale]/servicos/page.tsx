@@ -38,7 +38,7 @@ export default function ServicesPage() {
   ];
 
   return (
-    <section className="relative min-h-screen bg-gray-900 text-white pt-16 md:pt-24 pb-16">
+    <section className="relative min-h-screen bg-gray-900 text-white pt-16 md:pt-32 pb-16">
       <div className="absolute inset-0 z-0">
         <Image
           src={servicesBgImage}

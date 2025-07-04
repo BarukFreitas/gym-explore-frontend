@@ -10,7 +10,7 @@ export default function AboutPage() {
   const t = useTranslations("AboutPage");
   return (
     <>
-      <main className="bg-gray-900 text-white min-h-screen pt-28">
+      <main className="bg-gray-900 text-white min-h-screen pt-24">
         <section className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden">
           <Image
             src={sobreBG}
