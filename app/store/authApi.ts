@@ -5,7 +5,7 @@ export interface PointsResponse {
   points: number;
 }
 
-// >>> NOVAS INTERFACES ADICIONADAS AQUI <<<
+
 export interface ForgotPasswordPayload {
   email: string;
 }
@@ -49,9 +49,6 @@ export const authApi = createApi({
       providesTags: (result, error, userId) => [{ type: 'User', id: userId }],
     }),
 
-    // >>> NOVOS ENDPOINTS ADICIONADOS AQUI <<<
-
-    // Mutation para solicitar o e-mail de redefinição
     forgotPassword: builder.mutation<void, ForgotPasswordPayload>({
       query: (payload) => ({
         url: '/password/forgot',
@@ -60,7 +57,7 @@ export const authApi = createApi({
       }),
     }),
 
-    // Mutation para submeter a nova senha com o token
+
     resetPassword: builder.mutation<void, ResetPasswordPayload>({
       query: (payload) => ({
         url: '/password/reset',
@@ -71,7 +68,7 @@ export const authApi = createApi({
   }),
 });
 
-// Exporte os novos hooks
+
 export const {
   useRegisterUserMutation,
   useLoginUserMutation,

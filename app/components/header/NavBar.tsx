@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, type FC } from 'react'; // Adicionado 'type FC' aqui
+import React, { useState, useEffect, type FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "@/app/store/store";
 import { clearCredentials } from "@/app/store/authSlice";
 
-// CORREÇÃO: Tipagem explícita para o componente Navbar para indicar que não recebe props
+
 const Navbar: FC = () => {
   const t = useTranslations("Navbar");
   const locale = useLocale();

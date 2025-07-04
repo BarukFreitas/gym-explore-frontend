@@ -47,7 +47,7 @@ export interface StoreItemCreatePayload {
     pointsCost: number;
 }
 
-// >>> NOVA INTERFACE ADICIONADA AQUI <<<
+
 export interface PurchasePayload {
     userId: number;
     itemId: number;
@@ -145,13 +145,13 @@ export const gymsApi = createApi({
             invalidatesTags: ['StoreItem'],
         }),
 
-        // >>> NOVO ENDPOINT ADICIONADO AQUI <<<
+
         purchaseStoreItem: builder.mutation<void, PurchasePayload>({
             query: ({ userId, itemId }) => ({
                 url: `store/purchase/user/${userId}/item/${itemId}`,
                 method: 'POST',
             }),
-            // Invalida a tag do utilizador para forçar a atualização dos pontos na navbar
+
             invalidatesTags: (result, error, { userId }) => [{ type: 'User', id: userId }],
         })
     }),
@@ -167,5 +167,5 @@ export const {
     useSendContactFormMutation,
     useGetStoreItemsQuery,
     useAddStoreItemMutation,
-    usePurchaseStoreItemMutation // <<< NOVO HOOK EXPORTADO
+    usePurchaseStoreItemMutation
 } = gymsApi;

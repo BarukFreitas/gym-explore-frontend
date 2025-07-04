@@ -1,4 +1,3 @@
-// O que o formulário de registo envia
 export interface UserRegisterRequest {
   username: string;
   email: string;
@@ -6,13 +5,12 @@ export interface UserRegisterRequest {
   role: string;
 }
 
-// O que o formulário de login envia
 export interface UserLoginRequest {
   username: string;
   password: string;
 }
 
-// Como a resposta da sua API de login deve ser
+
 export interface UserAuthResponse {
   id: number;
   username: string;
@@ -22,7 +20,7 @@ export interface UserAuthResponse {
   points: number;
 }
 
-// Interface para o tratamento de erros
+
 export interface ErrorResponse {
   error: string;
   message?: string; // Opcional

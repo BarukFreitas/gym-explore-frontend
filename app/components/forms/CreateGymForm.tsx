@@ -40,7 +40,6 @@ export default function CreateGymForm() {
         <div className="w-full max-w-2xl bg-gray-800 p-8 rounded-lg shadow-lg">
             <h1 className="text-3xl font-bold text-white mb-6 text-center">Adicionar Nova Academia</h1>
             <form onSubmit={handleSubmit} className="space-y-6">
-                {/* ... todos os seus campos de input ... */}
                 <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-300">Nome da Academia</label>
                     <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} required className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"/>

@@ -12,7 +12,7 @@ interface CreateReviewModalProps {
 }
 
 export default function CreateReviewModal({ gymId, onClose }: CreateReviewModalProps) {
-    // 1. OBTENHA O 'data' DA RESPOSTA DO HOOK
+
     const [addReview, { isLoading, isSuccess, data: addReviewResponseData }] = useAddReviewMutation();
     const [comment, setComment] = useState('');
     const [rating, setRating] = useState(0);
@@ -20,21 +20,21 @@ export default function CreateReviewModal({ gymId, onClose }: CreateReviewModalP
 
     const userId = useSelector((state: RootState) => state.auth.id);
 
-    // 2. AJUSTE O USEEFFECT PARA LER A RESPOSTA
+
     useEffect(() => {
-        // Só executa se a requisição foi bem-sucedida
+
         if (isSuccess) {
-            // Verifica se o backend confirmou que os pontos foram atribuídos
+
             if (addReviewResponseData?.pointsAwarded) {
                 toast.success("🎉 Você ganhou 15 pontos pela sua avaliação!");
             } else {
-                // Se a criação foi bem-sucedida mas sem pontos, mostre uma mensagem diferente
+
                 toast.info("Avaliação enviada com sucesso!");
             }
-            // Fecha o modal em qualquer caso de sucesso
+
             onClose();
         }
-    }, [isSuccess, addReviewResponseData, onClose]); // Adicione a nova dependência
+    }, [isSuccess, addReviewResponseData, onClose]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -48,9 +48,9 @@ export default function CreateReviewModal({ gymId, onClose }: CreateReviewModalP
         }
 
         try {
-            // A chamada à API continua a mesma
+
             await addReview({ gymId, userId, comment, rating }).unwrap();
-            // A lógica de notificação e fecho do modal agora é tratada pelo useEffect
+
         } catch (err) {
             console.error('Falha ao enviar avaliação:', err);
             setError('Ocorreu um erro ao enviar a sua avaliação.');
