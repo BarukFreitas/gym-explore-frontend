@@ -18,13 +18,14 @@ import {
   Grid
 } from '@mui/material';
 import { useRegisterUserMutation, useLoginUserMutation } from '@/app/store/authApi';
-import { UserRegisterRequest, UserLoginRequest, UserAuthResponse, ErrorResponse } from '@/app/types/auth';
+import { UserRegisterRequest, UserLoginRequest, UserAuthResponse } from '@/app/types/auth';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '@/app/store/authSlice';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -63,7 +64,7 @@ const AuthPage = () => {
   const t = useTranslations("AuthPage");
   const router = useRouter();
   const dispatch = useDispatch();
-  const locale = useLocale(); // Obtenha o locale atual
+  const locale = useLocale();
 
   const [tabValue, setTabValue] = useState(0);
 
@@ -131,9 +132,7 @@ const AuthPage = () => {
           </Box>
 
           <CustomTabPanel value={tabValue} index={0}>
-            <Typography component="h1" variant="h5" sx={{ mb: 3 }} textAlign="center" color="black">
-              {t("loginTitle")}
-            </Typography>
+            <Typography component="h1" variant="h5" sx={{ mb: 3 }} textAlign="center" color="black">{t("loginTitle")}</Typography>
             <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
               <TextField margin="normal" required fullWidth id="loginUsername" label={t("usernameLabel")} name="username" autoComplete="username" autoFocus value={loginUsername} onChange={(e) => setLoginUsername(e.target.value)} InputLabelProps={{ style: { color: 'black' } }} InputProps={{ style: { color: 'black' } }} sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'rgba(0, 0, 0, 0.23)' }, '&:hover fieldset': { borderColor: 'black' }, '&.Mui-focused fieldset': { borderColor: 'black' }, }, backgroundColor: 'white' }}/>
               <TextField margin="normal" required fullWidth name="password" label={t("passwordLabel")} type="password" id="loginPassword" autoComplete="current-password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} InputLabelProps={{ style: { color: 'black' } }} InputProps={{ style: { color: 'black' } }} sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'rgba(0, 0, 0, 0.23)' }, '&:hover fieldset': { borderColor: 'black' }, '&.Mui-focused fieldset': { borderColor: 'black' }, }, backgroundColor: 'white' }}/>
@@ -142,31 +141,32 @@ const AuthPage = () => {
               </Button>
 
               <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link href={`/${locale}/forgot-password`} passHref>
-                    <Typography variant="body2" sx={{ color: '#2ECC71', textDecoration: 'underline', cursor: 'pointer', '&:hover': { color: '#28a745' } }}>
-                      {t('forgotPasswordLink')}
-                    </Typography>
-                  </Link>
-                </Grid>
+                <Link href={`/${locale}/forgot-password`} passHref>
+                  <Typography
+                      variant="body2"
+                      sx={{
+                        color: '#2ECC71',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                        '&:hover': { color: '#28a745' },
+                      }}
+                  >
+                    {t('forgotPasswordLink')}
+                  </Typography>
+                </Link>
               </Grid>
 
-              {loginError && (
-                  <Alert severity="error" sx={{ mt: 2 }}>
-                    {(loginError as any)?.data?.error || t("loginError")}
-                  </Alert>
-              )}
+              {loginError && <Alert severity="error" sx={{ mt: 2 }}>{(loginError as any)?.data?.error || t("loginError")}</Alert>}
             </Box>
           </CustomTabPanel>
 
           <CustomTabPanel value={tabValue} index={1}>
-            {/* ... O seu formulário de registo continua aqui, sem alterações ... */}
             <Typography component="h1" variant="h5" sx={{ mb: 3 }} textAlign="center" color="black">{t("registerTitle")}</Typography>
             <Box component="form" onSubmit={handleRegister} noValidate sx={{ mt: 1 }}>
-              <TextField margin="normal" required fullWidth id="registerUsername" label={t("usernameLabel")} name="username" autoComplete="new-username" value={registerUsername} onChange={(e) => setRegisterUsername(e.target.value)} InputLabelProps={{ style: { color: 'black' } }} InputProps={{ style: { color: 'black' } }} sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'rgba(0, 0, 0, 0.23)' }, '&:hover fieldset': { borderColor: 'black' }, '&.Mui-focused fieldset': { borderColor: 'black' }, }, backgroundColor: 'white' }}/>
-              <TextField margin="normal" required fullWidth id="registerEmail" label={t("emailLabel")} name="email" autoComplete="email" type="email" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} InputLabelProps={{ style: { color: 'black' } }} InputProps={{ style: { color: 'black' } }} sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'rgba(0, 0, 0, 0.23)' }, '&:hover fieldset': { borderColor: 'black' }, '&.Mui-focused fieldset': { borderColor: 'black' }, }, backgroundColor: 'white' }}/>
-              <TextField margin="normal" required fullWidth name="password" label={t("passwordLabel")} type="password" id="registerPassword" autoComplete="new-password" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} InputLabelProps={{ style: { color: 'black' } }} InputProps={{ style: { color: 'black' } }} sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'rgba(0, 0, 0, 0.23)' }, '&:hover fieldset': { borderColor: 'black' }, '&.Mui-focused fieldset': { borderColor: 'black' }, }, backgroundColor: 'white' }}/>
-              <FormControl component="fieldset" margin="normal" fullWidth sx={{ '& .MuiFormLabel-root': { color: 'black' }, '& .MuiFormControlLabel-label': { color: 'black' }, '& .MuiRadio-root': { color: 'black' }, '& .Mui-checked': { color: '#2ECC71' }, }}>
+              <TextField margin="normal" required fullWidth id="registerUsername" label={t("usernameLabel")} name="username" value={registerUsername} onChange={(e) => setRegisterUsername(e.target.value)} InputLabelProps={{ style: { color: 'black' } }} InputProps={{ style: { color: 'black' } }} sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'rgba(0, 0, 0, 0.23)' }, '&:hover fieldset': { borderColor: 'black' }, '&.Mui-focused fieldset': { borderColor: 'black' }, }, backgroundColor: 'white' }}/>
+              <TextField margin="normal" required fullWidth id="registerEmail" label={t("emailLabel")} name="email" type="email" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} InputLabelProps={{ style: { color: 'black' } }} InputProps={{ style: { color: 'black' } }} sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'rgba(0, 0, 0, 0.23)' }, '&:hover fieldset': { borderColor: 'black' }, '&.Mui-focused fieldset': { borderColor: 'black' }, }, backgroundColor: 'white' }}/>
+              <TextField margin="normal" required fullWidth name="password" label={t("passwordLabel")} type="password" id="registerPassword" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} InputLabelProps={{ style: { color: 'black' } }} InputProps={{ style: { color: 'black' } }} sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'rgba(0, 0, 0, 0.23)' }, '&:hover fieldset': { borderColor: 'black' }, '&.Mui-focused fieldset': { borderColor: 'black' }, }, backgroundColor: 'white' }}/>
+              <FormControl component="fieldset" margin="normal" fullWidth sx={{ '& .MuiFormLabel-root': { color: 'black' }, '& .MuiFormControlLabel-label': { color: 'black' }, '& .MuiRadio-root': { color: 'black' }, '& .Mui-checked': { color: '#2ECC71' } }}>
                 <FormLabel component="legend">{t("userTypeLabel")}</FormLabel>
                 <RadioGroup row value={selectedRole} onChange={(event) => setSelectedRole(event.target.value)} sx={{ justifyContent: 'center' }}>
                   <FormControlLabel value="ROLE_USER" control={<Radio />} label={t("commonUser")} />
@@ -177,11 +177,7 @@ const AuthPage = () => {
                 {isRegisterLoading ? t("registering") : t("registerButton")}
               </Button>
               {isRegisterSuccess && <Alert severity="success">{t("registerSuccess")}</Alert>}
-              {registerError && (
-                  <Alert severity="error">
-                    {(registerError as any)?.data?.error || t("registerError")}
-                  </Alert>
-              )}
+              {registerError && <Alert severity="error">{(registerError as any)?.data?.error || t("registerError")}</Alert>}
             </Box>
           </CustomTabPanel>
         </Box>
