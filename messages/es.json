@@ -6,15 +6,16 @@
     "contact": "Contacto",
     "joinNow": "Únete Ahora",
     "logoutButton": "Cerrar Sesión",
+    "logo": "GYM EXPLORE",
     "feed": "Feed",
     "gyms": "Gimnasios",
     "addGym": "Añadir Gimnasio",
-    "store": "Tienda",
-    "adminStore": "Admin Tienda"
+    "adminStore": "Admin Tienda",
+    "store": "Tienda"
   },
   "HeroSection": {
     "title": "Eleva tu entrenamiento",
-    "description": "Transforma tu cuerpo y mente con equipos de vanguardia, orientación experta y una comunidad que te impulsa. Comienza hoy tu viaje hacia una vida más fuerte y saludable.",
+    "description": "Transforma tu cuerpo y mente con equipos de última generación, orientación experta y una comunidad que te impulsa. Comienza hoy tu viaje hacia una vida más fuerte y saludable.",
     "getStarted": "Empezar",
     "figmaComponent": "Tu Viaje Fitness Comienza Aquí"
   },
@@ -29,9 +30,9 @@
     "privacyPolicy": "Política de Privacidad",
     "termsOfService": "Términos de Servicio",
     "contactUsTitle": "Contáctanos",
-    "address": "Calle del Gimnasio, 123, Ciudad Fitness, CF 12345",
-    "phone": "+55 (11) 98765-4321",
-    "email": "info@gymexplore.com",
+    "address": "Rua Restrita, 403 - Centro, Garanhuns - PE, 55290-000, Brasil",
+    "phone": "+55 (87) 9 2000-8555",
+    "email": "contact@gymexplore.com.br",
     "allRightsReserved": "© {year} Gym Explore. Todos los derechos reservados."
   },
   "AboutPage": {
@@ -64,16 +65,16 @@
       "sendButton": "Enviar Mensaje",
       "sending": "Enviando...",
       "successMessage": "¡Mensaje enviado con éxito! Nos pondremos en contacto contigo en breve.",
-      "errorMessage": "Ocurrió un erro ao enviar el mensaje. Por favor, inténtalo de nuevo más tarde."
+      "errorMessage": "Ocurrió un error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde."
     },
     "Info": {
       "addressTitle": "Dirección",
-      "addressLine1": "Avenida Paulista, 1578",
-      "addressLine2": "Bela Vista, São Paulo - SP, 01310-200, Brasil",
+      "addressLine1": "Rua Restrita, 403",
+      "addressLine2": "Centro, Garanhuns - PE, 55290-000, Brasil",
       "phoneTitle": "Teléfono",
-      "phoneNumber": "+55 (11) 98765-4321",
+      "phoneNumber": "+55 (87) 9 2000-8555",
       "emailTitle": "Correo Electrónico",
-      "emailAddress": "contacto@gymexplore.com.br",
+      "emailAddress": "contact@gymexplore.com.br",
       "hoursTitle": "Horario de Apertura",
       "hoursDetails": "Lunes a Viernes: 06:00 AM - 11:00 PM\nSábado: 08:00 AM - 06:00 PM\nDomingo: Cerrado",
       "viewOnMap": "Ver en el Mapa"
@@ -84,27 +85,27 @@
     "subtitle": "Descubre cómo Gym Explore puede transformar tu viaje fitness y conectarte con la comunidad ideal.",
     "imageAlt": "Personas conectándose y entrenando en un gimnasio moderno",
     "card1Title": "Conéctate con la Comunidad",
-    "card1Description": "Encuentra y sigue amigos, descubre nuevos gimnasios e interactúa con una comunidad de entusiastas del fitness.",
+    "card1Description": "Encuentra amigos, descubre nuevos gimnasios e interactúa con una comunidad de entusiastas del fitness.",
     "card2Title": "Comparte Tu Viaje",
     "card2Description": "Publica tus rutinas de entrenamiento, consejos de nutrición y logros. Inspírate y sé inspirado por otros miembros.",
     "card3Title": "Perfiles de Gimnasios",
-    "card3Description": "Explora perfiles detallados de gimnasios, ve reseñas, horarios y servicios ofrecidos. Etiqueta tu gimnasio en tus publicaciones.",
+    "card3Description": "Explora perfiles de gimnasios, ve sus valoraciones y ubicaciones.",
     "card4Title": "Gana Recompensas",
-    "card4Description": "Al etiquetar gimnasios e interactuar en la plataforma, acumulas puntos y desbloqueas recompensas exclusivas.",
+    "card4Description": "Al valorar gimnasios e interactuar en la plataforma, acumulas puntos y desbloqueas recompensas exclusivas.",
     "featuresHeading": "Características Clave",
     "Features": {
       "feature1Title": "Red Social Fitness",
       "feature1Description": "Conéctate con otros usuarios, comparte consejos y encuentra compañeros de entrenamiento.",
       "feature2Title": "Creación de Contenido",
-      "feature2Description": "Publica tus rutinas, fotos y videos de entrenamiento, inspira a la comunidad.",
+      "feature2Description": "Publica tus rutinas, fotos de entrenamiento, inspira a la comunidad.",
       "feature3Title": "Gamificación y Puntos",
-      "feature3Description": "Gana puntos al interactuar, completar desafíos y etiquetar gimnasios en tus publicaciones.",
+      "feature3Description": "Gana puntos al interactuar y completar desafíos.",
       "feature4Title": "Perfiles Detallados de Gimnasios",
-      "feature4Description": "Accede a información completa de gimnasios, incluyendo reseñas, horarios y galería de fotos.",
+      "feature4Description": "Accede a información de gimnasios, incluyendo valoraciones y ubicaciones.",
       "feature5Title": "Integración de Marcas",
-      "feature5Description": "Los gimnasios pueden crear perfiles, promocionar eventos e interactuar directamente con los miembros.",
-      "feature6Title": "Desafíos Personalizados",
-      "feature6Description": "Participa en desafíos exclusivos creados por la comunidad o los gimnasios para mantenerte motivado."
+      "feature5Description": "Los gimnasios pueden crear perfiles y promocionar eventos.",
+      "feature6Title": "FitCoins",
+      "feature6Description": "Canjea tus puntos por beneficios exclusivos."
     },
     "ctaText": "¿Listo para comenzar tu viaje en Gym Explore?",
     "ctaButton": "Únete a Gym Explore"
@@ -133,16 +134,20 @@
     "forgotPasswordLink": "¿Olvidaste tu contraseña?"
   },
   "FeedPage": {
-    "feedTitle": "Feed de Actividad",
-    "newPostPlaceholder": "Comparte tu rutina de entrenamiento, consejos o logros aquí...",
+    "feedTitle": "Tu Feed",
+    "newPostPlaceholder": "¿En qué estás pensando?",
     "imageUrlPlaceholder": "URL de la Imagen (opcional)",
     "postButton": "Publicar",
     "recentPostsTitle": "Publicaciones Recientes",
-    "noPostsYet": "No hay publicaciones para mostrar. ¡Sé el primero en compartir!",
-    "emptyPostError": "Tu publicación no puede estar vacía.",
+    "emptyPostError": "El contenido de la publicación no puede estar vacío.",
     "notLoggedInToPostError": "Debes iniciar sesión para crear una publicación.",
-    "genericPostError": "Ocurrió un error al intentar publicar. Por favor, inténtalo de nuevo.",
-    "postSuccessMessage": "¡Publicación exitosa!",
-    "errorLoadingPosts": "Error al cargar las publicaciones. Por favor, intenta actualizar la página."
+    "genericPostError": "Ocurrió un error al crear la publicación.",
+    "postSuccessMessage": "¡Publicación creada con éxito!",
+    "noPostsYet": "Todavía no hay publicaciones. ¡Sé el primero en publicar!",
+    "deletePostButton": "Eliminar",
+    "confirmDeletePost": "¿Estás seguro de que quieres eliminar esta publicación?",
+    "postDeletedSuccess": "¡Publicación eliminada con éxito!",
+    "postDeletedError": "Ocurrió un error al eliminar la publicación.",
+    "feedBackgroundImageAlt": "Imagen de fondo de un gimnasio con equipos de ejercicio"
   }
 }

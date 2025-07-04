@@ -157,7 +157,7 @@ export default function NavBarLogado({ onLogout, username }: NavBarLogadoProps) 
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: 'rgba(255, 255, 255, 0.1)', p: '4px 12px', borderRadius: '20px', mb: 2 }}>
                         <Typography sx={{ color: '#facc15', fontSize: '1rem' }}>★</Typography>
                         <Typography sx={{ color: 'white', fontSize: '0.9rem', fontWeight: '500' }}>
-                            {isLoadingPoints ? '...' : (pointsData?.points ?? 0)} Pontos
+                            {isLoadingPoints ? '...' : (pointsData?.points ?? 0)} FitCoins
                         </Typography>
                     </Box>
                 </Box>

@@ -40,7 +40,7 @@ export default function StoreItemCard({ item, currentUserPoints, userId }: Store
             <div className="mt-6">
                 <div className="flex items-center justify-center text-2xl font-bold text-yellow-400 mb-4">
                     <span className="mr-2">★</span>
-                    <span>{item.pointsCost} Pontos</span>
+                    <span>{item.pointsCost} Fitcoins</span>
                 </div>
                 <button
                     onClick={handlePurchase}

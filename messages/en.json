@@ -6,11 +6,12 @@
     "contact": "Contact",
     "joinNow": "Join Now",
     "logoutButton": "Logout",
+    "logo": "GYM EXPLORE",
     "feed": "Feed",
     "gyms": "Gyms",
     "addGym": "Add Gym",
-    "store": "Store",
-    "adminStore": "Admin Store"
+    "adminStore": "Admin Store",
+    "store": "Store"
   },
   "HeroSection": {
     "title": "Elevate your workout",
@@ -20,7 +21,7 @@
   },
   "Footer": {
     "aboutUsTitle": "About Us",
-    "aboutUsText": "Dedicated to helping you achieve your fitness goals. We provide top-notch facilities and expert guidance.",
+    "aboutUsText": "Dedicated to helping you achieve your fitness goals. We offer top-notch facilities and expert guidance.",
     "quickLinksTitle": "Quick Links",
     "home": "Home",
     "about": "About",
@@ -29,9 +30,9 @@
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
     "contactUsTitle": "Contact Us",
-    "address": "Fitness Avenue, 123, Gym City, GC 12345",
-    "phone": "+55 (11) 98765-4321",
-    "email": "info@gymexplore.com",
+    "address": "Rua Restrita, 403 - Centro, Garanhuns - PE, 55290-000, Brazil",
+    "phone": "+55 (87) 9 2000-8555",
+    "email": "contact@gymexplore.com.br",
     "allRightsReserved": "© {year} Gym Explore. All rights reserved."
   },
   "AboutPage": {
@@ -68,10 +69,10 @@
     },
     "Info": {
       "addressTitle": "Address",
-      "addressLine1": "Paulista Avenue, 1578",
-      "addressLine2": "Bela Vista, São Paulo - SP, 01310-200, Brazil",
+      "addressLine1": "Rua Restrita, 403",
+      "addressLine2": "Centro, Garanhuns - PE, 55290-000, Brazil",
       "phoneTitle": "Phone",
-      "phoneNumber": "+55 (11) 98765-4321",
+      "phoneNumber": "+55 (87) 9 2000-8555",
       "emailTitle": "Email",
       "emailAddress": "contact@gymexplore.com.br",
       "hoursTitle": "Opening Hours",
@@ -84,27 +85,27 @@
     "subtitle": "Discover how Gym Explore can transform your fitness journey and connect you with the ideal community.",
     "imageAlt": "People connecting and training in a modern gym",
     "card1Title": "Connect with the Community",
-    "card1Description": "Find and follow friends, discover new gyms, and interact with a community of fitness enthusiasts.",
+    "card1Description": "Find friends, discover new gyms, and interact with a community of fitness enthusiasts.",
     "card2Title": "Share Your Journey",
     "card2Description": "Post your workout routines, nutrition tips, and achievements. Inspire and be inspired by other members.",
     "card3Title": "Gym Profiles",
-    "card3Description": "Explore detailed gym profiles, view reviews, schedules, and offered services. Tag your gym in your posts.",
+    "card3Description": "Explore gym profiles, view their ratings and locations.",
     "card4Title": "Earn Rewards",
-    "card4Description": "By tagging gyms and interacting on the platform, you accumulate points and unlock exclusive rewards.",
+    "card4Description": "By rating gyms and interacting on the platform, you accumulate points and unlock exclusive rewards.",
     "featuresHeading": "Key Features",
     "Features": {
       "feature1Title": "Fitness Social Network",
       "feature1Description": "Connect with other users, share tips, and find workout partners.",
       "feature2Title": "Content Creation",
-      "feature2Description": "Publish your routines, photos, and training videos, inspire the community.",
+      "feature2Description": "Publish your routines, workout photos, inspire the community.",
       "feature3Title": "Gamification and Points",
-      "feature3Description": "Earn points by interacting, completing challenges, and tagging gyms in your posts.",
+      "feature3Description": "Earn points by interacting and completing challenges.",
       "feature4Title": "Detailed Gym Profiles",
-      "feature4Description": "Access complete gym information, including reviews, schedules, and photo gallery.",
+      "feature4Description": "Access gym information, including ratings and locations.",
       "feature5Title": "Brand Integration",
-      "feature5Description": "Gyms can create profiles, promote events, and interact directly with members.",
-      "feature6Title": "Personalized Challenges",
-      "feature6Description": "Participate in exclusive challenges created by the community or gyms to stay motivated."
+      "feature5Description": "Gyms can create profiles and promote events.",
+      "feature6Title": "FitCoins",
+      "feature6Description": "Exchange your points for exclusive benefits."
     },
     "ctaText": "Ready to start your journey at Gym Explore?",
     "ctaButton": "Join Gym Explore"
@@ -133,16 +134,20 @@
     "forgotPasswordLink": "Forgot your password?"
   },
   "FeedPage": {
-    "feedTitle": "Activity Feed",
-    "newPostPlaceholder": "Share your workout routine, tips, or achievements here...",
+    "feedTitle": "Your Feed",
+    "newPostPlaceholder": "What are you thinking?",
     "imageUrlPlaceholder": "Image URL (optional)",
     "postButton": "Post",
     "recentPostsTitle": "Recent Posts",
-    "noPostsYet": "No posts to display. Be the first to share!",
-    "emptyPostError": "Your post cannot be empty.",
-    "notLoggedInToPostError": "You must be logged in to create a post.",
-    "genericPostError": "An error occurred while trying to publish. Please try again.",
-    "postSuccessMessage": "Post published successfully!",
-    "errorLoadingPosts": "Error loading posts. Please try refreshing the page."
+    "emptyPostError": "Post content cannot be empty.",
+    "notLoggedInToPostError": "You need to be logged in to create a post.",
+    "genericPostError": "An error occurred while creating the post.",
+    "postSuccessMessage": "Post created successfully!",
+    "noPostsYet": "No posts yet. Be the first to post!",
+    "deletePostButton": "Delete",
+    "confirmDeletePost": "Are you sure you want to delete this post?",
+    "postDeletedSuccess": "Post deleted successfully!",
+    "postDeletedError": "An error occurred while deleting the post.",
+    "feedBackgroundImageAlt": "Background image of a gym with exercise equipment"
   }
 }

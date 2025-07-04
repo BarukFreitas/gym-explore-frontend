@@ -83,7 +83,7 @@ export default function ServicesPage() {
             {t('ctaText')}
           </p>
           <a
-            href={`/${useLocale()}/join`}
+            href={`/${useLocale()}/auth`}
             className="inline-block bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg
                        hover:bg-green-700 transition-colors duration-300 shadow-lg"
           >
