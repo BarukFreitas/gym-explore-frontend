@@ -8,7 +8,9 @@
     "logoutButton": "Cerrar Sesión",
     "feed": "Feed",
     "gyms": "Gimnasios",
-    "addGym": "Añadir Gimnasio"
+    "addGym": "Añadir Gimnasio",
+    "store": "Tienda",
+    "adminStore": "Admin Tienda"
   },
   "HeroSection": {
     "title": "Eleva tu entrenamiento",
