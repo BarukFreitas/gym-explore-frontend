@@ -16,6 +16,7 @@ export interface UserAuthResponse {
   email: string;
   message: string;
   roles: string[];
+  token: string;
 }
 
 export interface ErrorResponse {

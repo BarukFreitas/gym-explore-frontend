@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { RootState } from "./store";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
@@ -47,7 +48,6 @@ export interface StoreItemCreatePayload {
     pointsCost: number;
 }
 
-// >>> NOVA INTERFACE ADICIONADA AQUI <<<
 export interface PurchasePayload {
     userId: number;
     itemId: number;
@@ -64,6 +64,16 @@ export const gymsApi = createApi({
     reducerPath: "gymsApi",
     baseQuery: fetchBaseQuery({
         baseUrl: API_BASE_URL,
+        prepareHeaders: (headers, { getState }) => {
+            const token = (getState() as RootState).auth.token; 
+            console.log("DEBUG - Token no gymsApi.ts prepareHeaders:", token); 
+            if (token) {
+                headers.set("Authorization", `Bearer ${token}`);
+            } else {
+                console.warn("AVISO: Token JWT não encontrado no estado Redux para gymsApi. Requisição pode falhar por autenticação.");
+            }
+            return headers;
+        },
     }),
     tagTypes: ["Gym", "Review", "User", "StoreItem"],
     endpoints: (builder) => ({
@@ -106,7 +116,7 @@ export const gymsApi = createApi({
 
         updateGym: builder.mutation<Gym, GymUpdatePayload>({
             query: ({ id, body }) => ({
-                url: `gyms/${id}`, 
+                url: `gyms/${id}`,
                 method: 'PUT',
                 body,
             }),
@@ -145,13 +155,12 @@ export const gymsApi = createApi({
             invalidatesTags: ['StoreItem'],
         }),
 
-        // >>> NOVO ENDPOINT ADICIONADO AQUI <<<
         purchaseStoreItem: builder.mutation<void, PurchasePayload>({
             query: ({ userId, itemId }) => ({
                 url: `store/purchase/user/${userId}/item/${itemId}`,
                 method: 'POST',
+                body: {}
             }),
-            // Invalida a tag do utilizador para forçar a atualização dos pontos na navbar
             invalidatesTags: (result, error, { userId }) => [{ type: 'User', id: userId }],
         })
     }),
@@ -167,5 +176,5 @@ export const {
     useSendContactFormMutation,
     useGetStoreItemsQuery,
     useAddStoreItemMutation,
-    usePurchaseStoreItemMutation // <<< NOVO HOOK EXPORTADO
+    usePurchaseStoreItemMutation
 } = gymsApi;

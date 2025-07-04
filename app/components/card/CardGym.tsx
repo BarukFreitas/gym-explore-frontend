@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { useGetReviewsByGymIdQuery, useDeleteGymMutation, type Gym, type Review } from '@/app/store/gymsApi';
@@ -32,8 +32,11 @@ export default function GymCard({ gym }: GymCardProps) {
     const userRoles = useSelector((state: RootState) => state.auth?.roles || []);
     console.log("Roles do usuário no Card da Academia:", userRoles);
 
+    const isAdmin = userRoles.includes("ROLE_ADMIN");
+    const isGymOwner = userRoles.includes("ROLE_GYM_OWNER");
+    const canReview = userRoles.includes("ROLE_USER") || isAdmin; 
 
-    const canManageGym = (userRoles || []).includes("ROLE_GYM_OWNER") || (userRoles || []).includes("ROLE_ADMIN");
+    const canManageOrAdmin = isGymOwner || isAdmin;
 
 
     const [deleteGym, { isLoading: isDeleting }] = useDeleteGymMutation();
@@ -72,7 +75,7 @@ export default function GymCard({ gym }: GymCardProps) {
                     <p className="text-gray-400"><strong>Telefone:</strong> {gym.phone}</p>
                 </div>
 
-                {canManageGym && (
+                {canManageOrAdmin && (
                     <div className="flex p-2 bg-gray-900 border-t border-gray-700">
                         <Link
                             href={`/${locale}/gyms/edit/${gym.id}`}
@@ -80,23 +83,27 @@ export default function GymCard({ gym }: GymCardProps) {
                         >
                             Editar
                         </Link>
-                        <button
-                            onClick={handleDelete}
-                            disabled={isDeleting}
-                            className="flex-1 text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-3 rounded-md text-sm mx-1 transition-colors disabled:opacity-50"
-                        >
-                            {isDeleting ? 'A excluir...' : 'Excluir'}
-                        </button>
+                        {isAdmin && (
+                            <button
+                                onClick={handleDelete}
+                                disabled={isDeleting}
+                                className="flex-1 text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-3 rounded-md text-sm mx-1 transition-colors disabled:opacity-50"
+                            >
+                                {isDeleting ? 'A excluir...' : 'Excluir'}
+                            </button>
+                        )}
                     </div>
                 )}
 
                 <div className="border-t border-gray-700 p-4 space-y-3">
-                    <button
-                        onClick={() => setIsReviewModalOpen(true)}
-                        className="text-center w-full bg-indigo-600 hover:bg-indigo-500 p-2 rounded-md text-sm font-semibold"
-                    >
-                        Deixar uma Avaliação
-                    </button>
+                    {canReview && (
+                        <button
+                            onClick={() => setIsReviewModalOpen(true)}
+                            className="text-center w-full bg-indigo-600 hover:bg-indigo-500 p-2 rounded-md text-sm font-semibold"
+                        >
+                            Deixar uma Avaliação
+                        </button>
+                    )}
 
                     <button
                         onClick={() => setShowReviews(!showReviews)}
